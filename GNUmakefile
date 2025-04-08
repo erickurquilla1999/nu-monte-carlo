@@ -7,9 +7,9 @@ DIM	= 3
 
 COMP    = gcc
 
-USE_MPI   = FALSE
-USE_OMP   = FALSE
-USE_CUDA  = FALSE
+USE_MPI   = TRUE
+USE_OMP   = TRUE
+USE_CUDA  = TRUE
 USE_HIP   = FALSE
 
 include $(AMREX_HOME)/Tools/GNUMake/Make.defs

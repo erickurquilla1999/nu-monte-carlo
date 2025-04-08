@@ -2,6 +2,7 @@
 #include <AMReX_Print.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_ParmParse.H>
+#include <AMReX_PlotFileUtil.H>
 
 #include "parameters.h"
 
@@ -53,6 +54,21 @@ void evolve()
         amrex::Geometry geom(domain_box, &real_box);
         amrex::GpuArray<amrex::Real, AMREX_SPACEDIM> cell_size_cm = geom.CellSizeArray();
 
+        for (amrex::MFIter mfi(mf_absorption_imfp_cm); mfi.isValid(); ++mfi) {
+            const amrex::Box& bx = mfi.validbox();
+            const amrex::Array4<amrex::Real>& mf_array_absorption_imfp_cm = mf_absorption_imfp_cm.array(mfi);
+
+            amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) {
+
+                amrex::Real x = (i + 0.5) * cell_size_cm[0];
+                amrex::Real y = (j + 0.5) * cell_size_cm[1];
+                amrex::Real z = (k + 0.5) * cell_size_cm[2];
+
+                mf_array_absorption_imfp_cm(i,j,k) = x; // Set the value of the MultiFab to 1.0
+            });
+        }
+
+        WriteSingleLevelPlotfile("plt001", mf_absorption_imfp_cm, {"absorption_imfp_cm"}, geom, 0.0, 0);
     }
 
 int main (int argc, char* argv[])

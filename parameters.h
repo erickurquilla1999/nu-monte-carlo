@@ -12,9 +12,9 @@ struct Parameters_struct
     int input_max_grid_size_x; // Maximum grid size subdivisions in x of the domain for parallelization
     int input_max_grid_size_y; // Maximum grid size subdivisions in y of the domain for parallelization
     int input_max_grid_size_z; // Maximum grid size subdivisions in z of the domain for parallelization
-    double input_physical_domain_size_x_cm; // Physical size of the domain in the x-direction
-    double input_physical_domain_size_y_cm; // Physical size of the domain in the y-direction
-    double input_physical_domain_size_z_cm; // Physical size of the domain in the z-direction    
+    amrex::Real input_physical_domain_size_x_cm; // Physical size of the domain in the x-direction
+    amrex::Real input_physical_domain_size_y_cm; // Physical size of the domain in the y-direction
+    amrex::Real input_physical_domain_size_z_cm; // Physical size of the domain in the z-direction
 };
 
 void get_parameters(Parameters_struct& params)

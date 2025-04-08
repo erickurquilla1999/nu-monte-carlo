@@ -12,6 +12,9 @@ struct Parameters_struct
     int input_max_grid_size_x; // Maximum grid size subdivisions in x of the domain for parallelization
     int input_max_grid_size_y; // Maximum grid size subdivisions in y of the domain for parallelization
     int input_max_grid_size_z; // Maximum grid size subdivisions in z of the domain for parallelization
+    double input_physical_domain_size_x_cm; // Physical size of the domain in the x-direction
+    double input_physical_domain_size_y_cm; // Physical size of the domain in the y-direction
+    double input_physical_domain_size_z_cm; // Physical size of the domain in the z-direction    
 };
 
 void get_parameters(Parameters_struct& params)
@@ -23,6 +26,9 @@ void get_parameters(Parameters_struct& params)
     pp.get("input_max_grid_size_x", params.input_max_grid_size_x); // Maximum grid size subdivisions in x of the domain for parallelization
     pp.get("input_max_grid_size_y", params.input_max_grid_size_y); // Maximum grid size subdivisions in y of the domain for parallelization 
     pp.get("input_max_grid_size_z", params.input_max_grid_size_z); // Maximum grid size subdivisions in z of the domain for parallelization
+    pp.get("input_physical_domain_size_x_cm", params.input_physical_domain_size_x_cm); // Physical size of the domain in the x-direction
+    pp.get("input_physical_domain_size_y_cm", params.input_physical_domain_size_y_cm); // Physical size of the domain in the y-direction
+    pp.get("input_physical_domain_size_z_cm", params.input_physical_domain_size_z_cm); // Physical size of the domain in the z-direction
 }
 
 #endif

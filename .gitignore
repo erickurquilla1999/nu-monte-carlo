@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+*.ex
+
+# Compilation temp dir
+tmp_build_dir

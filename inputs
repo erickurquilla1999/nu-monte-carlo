@@ -1,0 +1,7 @@
+input_n_cell_x = 32  # Number of cells in the x-direction
+input_n_cell_y = 32  # Number of cells in the y-direction
+input_n_cell_z = 32  # Number of cells in the z-direction
+
+input_max_grid_size_x = 16  # Maximum grid size subdivisions in x of the domain for parallelization
+input_max_grid_size_y = 16  # Maximum grid size subdivisions in y of the domain for parallelization
+input_max_grid_size_z = 16  # Maximum grid size subdivisions in z of the domain for parallelization

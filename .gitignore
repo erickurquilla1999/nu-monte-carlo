@@ -35,3 +35,4 @@
 # Compilation temp dir
 tmp_build_dir
 Backtrace*
+plt*

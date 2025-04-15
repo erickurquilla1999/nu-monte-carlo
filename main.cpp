@@ -30,7 +30,7 @@ void evolve()
 
     // Set up the simulation domain
     amrex::IntVect domain_low_cells(0,0,0);
-    amrex::IntVect domain_high_cells(params.input_n_cell_x, params.input_n_cell_y, params.input_n_cell_z);
+    amrex::IntVect domain_high_cells(params.input_n_cell_x-1, params.input_n_cell_y-1, params.input_n_cell_z-1);
 
     // Create the domain box
     amrex::Box domain_box(domain_low_cells, domain_high_cells);
@@ -76,6 +76,9 @@ void evolve()
     // Create the particle container
     MCParticleContainer particles(geom, distribution_mapping, domain_box_array);
     particles.InitParticles();
+
+    // print particles value
+    particles.LoopParticlesPrint();
 
 }
 

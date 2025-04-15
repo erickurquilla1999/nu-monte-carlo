@@ -41,6 +41,8 @@ public:
 
     void InitParticles();
 
+    void LoopParticlesPrint();
+
 };
 
 #endif

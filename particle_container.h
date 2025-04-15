@@ -39,7 +39,7 @@ public:
                         const amrex::DistributionMapping & a_dmap,
                         const amrex::BoxArray            & a_ba);
 
-    void InitParticles();
+    void InitParticlesTest1();
 
     void LoopParticlesPrint();
 

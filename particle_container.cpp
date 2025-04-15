@@ -17,12 +17,15 @@ MCParticleContainer(const Geometry            & a_geom,
 }
 
 void
-MCParticleContainer::InitParticles()
+MCParticleContainer::InitParticlesTest1()
 {
     const int lev = 0;
     const Geometry& geom = Geom(lev);
     const Real* dx = geom.CellSize();
+    amrex::Print() << "Cell size (dx): " << dx[0] << ", " << dx[1] << ", " << dx[2] << "\n";
     const Real* plo = geom.ProbLo();
+    amrex::Print() << "ProbLo (plo): " << plo[0] << ", " << plo[1] << ", " << plo[2] << "\n";
+
 
     const int num_ppc = 10;
 
@@ -30,8 +33,12 @@ MCParticleContainer::InitParticles()
     {
         const Box& tile_box  = mfi.tilebox();
         const RealBox tile_realbox{tile_box, geom.CellSize(), geom.ProbLo()};
+
         const int grid_id = mfi.index();
+        amrex::Print() << "Grid ID: " << grid_id << "\n";
         const int tile_id = mfi.LocalTileIndex();
+        amrex::Print() << "Tile ID: " << tile_id << "\n";
+
         auto& particle_tile = GetParticles(lev)[std::make_pair(grid_id,tile_id)];
 
         for (IntVect iv = tile_box.smallEnd(); iv <= tile_box.bigEnd(); tile_box.next(iv))

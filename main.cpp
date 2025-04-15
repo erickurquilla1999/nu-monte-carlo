@@ -75,7 +75,7 @@ void evolve()
 
     // Create the particle container
     MCParticleContainer particles(geom, distribution_mapping, domain_box_array);
-    particles.InitParticles();
+    particles.InitParticlesTest1();
 
     // print particles value
     particles.LoopParticlesPrint();

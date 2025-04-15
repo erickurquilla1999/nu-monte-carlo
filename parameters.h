@@ -33,4 +33,19 @@ void get_parameters(Parameters_struct& params)
     pp.get("test_1_n_particles", params.test_1_n_particles); // Number of particles to be created for test one
 }
 
+void print_parameters(const Parameters_struct& params)
+{
+    amrex::Print() << "Input Parameters:" << std::endl;
+    amrex::Print() << "  input_n_cell_x: " << params.input_n_cell_x << std::endl;
+    amrex::Print() << "  input_n_cell_y: " << params.input_n_cell_y << std::endl;
+    amrex::Print() << "  input_n_cell_z: " << params.input_n_cell_z << std::endl;
+    amrex::Print() << "  input_max_grid_size_x: " << params.input_max_grid_size_x << std::endl;
+    amrex::Print() << "  input_max_grid_size_y: " << params.input_max_grid_size_y << std::endl;
+    amrex::Print() << "  input_max_grid_size_z: " << params.input_max_grid_size_z << std::endl;
+    amrex::Print() << "  input_physical_domain_size_x_cm: " << params.input_physical_domain_size_x_cm << std::endl;
+    amrex::Print() << "  input_physical_domain_size_y_cm: " << params.input_physical_domain_size_y_cm << std::endl;
+    amrex::Print() << "  input_physical_domain_size_z_cm: " << params.input_physical_domain_size_z_cm << std::endl;
+    amrex::Print() << "  test_1_n_particles: " << params.test_1_n_particles << std::endl;
+}
+
 #endif

@@ -16,17 +16,7 @@ void evolve()
     // Get the simulation parameters
     Parameters_struct params;
     get_parameters(params);
-
-    amrex::Print() << "Input parameters:\n";
-    amrex::Print() << "  input_n_cell_x: " << params.input_n_cell_x << "\n";
-    amrex::Print() << "  input_n_cell_y: " << params.input_n_cell_y << "\n";
-    amrex::Print() << "  input_n_cell_z: " << params.input_n_cell_z << "\n";
-    amrex::Print() << "  input_max_grid_size_x: " << params.input_max_grid_size_x << "\n";
-    amrex::Print() << "  input_max_grid_size_y: " << params.input_max_grid_size_y << "\n";
-    amrex::Print() << "  input_max_grid_size_z: " << params.input_max_grid_size_z << "\n";
-    amrex::Print() << "  input_physical_domain_size_x_cm: " << params.input_physical_domain_size_x_cm << "\n";
-    amrex::Print() << "  input_physical_domain_size_y_cm: " << params.input_physical_domain_size_y_cm << "\n";
-    amrex::Print() << "  input_physical_domain_size_z_cm: " << params.input_physical_domain_size_z_cm << "\n";
+    print_parameters(params);
 
     // Set up the simulation domain
     amrex::IntVect domain_low_cells(0,0,0);

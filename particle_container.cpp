@@ -59,3 +59,25 @@ MCParticleContainer::InitParticles()
 
 
 }
+
+void
+MCParticleContainer::LoopParticlesPrint()
+{
+    const int lev = 0;
+    for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
+    {
+        const int np  = pti.numParticles();
+        ParticleType* pstruct = &(pti.GetArrayOfStructs()[0]);
+
+        amrex::ParallelFor (np, [=] AMREX_GPU_DEVICE (int i) {
+
+            ParticleType& p = pstruct[i];
+
+            printf("Particle position: (%f, %f, %f)\n",
+                   p.pos(0),
+                   p.pos(1),
+                   p.pos(2));
+
+        });
+    }
+}

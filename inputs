@@ -9,3 +9,5 @@ input_max_grid_size_z = 1  # Maximum grid size subdivisions in z of the domain f
 input_physical_domain_size_x_cm = 10.0  # Physical domain size in the x-direction
 input_physical_domain_size_y_cm = 1.0  # Physical domain size in the y-direction
 input_physical_domain_size_z_cm = 1.0  # Physical domain size in the z-direction
+
+test_1_n_particles = 10 # Number of particles to be created for test one

@@ -38,38 +38,41 @@ MCParticleContainer::InitParticlesTest1(const int nbox, const int num_par_test_1
         amrex::Print() << "Grid ID: " << grid_id << "\n";
         const int tile_id = mfi.LocalTileIndex();
         amrex::Print() << "Tile ID: " << tile_id << "\n";
-
         auto& particle_tile = GetParticles(lev)[std::make_pair(grid_id,tile_id)];
 
-        IntVect init_indx_cell_in_tile_box = tile_box.smallEnd();
+        for (IntVect iv = tile_box.smallEnd(); iv <= tile_box.bigEnd(); tile_box.next(iv))
+        {
+            amrex::Print() << "IntVect iv: (" << iv[0] << ", " << iv[1] << ", " << iv[2] << ")\n";
 
-        amrex::Print() << "IntVect init_indx_cell_in_tile_box: (" << init_indx_cell_in_tile_box[0] << ", " << init_indx_cell_in_tile_box[1] << ", " << init_indx_cell_in_tile_box[2] << ")\n";
+            if (iv[0] == 0 && iv[1] == 0 && iv[2] == 0) {
 
-        for (int i_part=0; i_part<num_par_per_tile;i_part++) {
+                for (int i_part=0; i_part<num_par_per_tile;i_part++) {
 
-            ParticleType p;
+                    ParticleType p;
 
-            p.id()  = ParticleType::NextID();
-            p.cpu() = ParallelDescriptor::MyProc();
+                    p.id()  = ParticleType::NextID();
+                    p.cpu() = ParallelDescriptor::MyProc();
 
-            p.pos(0) = plo[0] + (init_indx_cell_in_tile_box[0] + 0.5) * dx[0]; 
-            p.pos(1) = plo[1] + (init_indx_cell_in_tile_box[1] + 0.5) * dx[1];
-            p.pos(2) = plo[2] + (init_indx_cell_in_tile_box[2] + 0.5) * dx[2];
+                    p.pos(0) = plo[0] + dx[0] * 0.5; 
+                    p.pos(1) = plo[1] + dx[1] * 0.5;
+                    p.pos(2) = plo[2] + dx[2] * 0.5;
 
-            p.rdata(RealData::x) = plo[0] + dx[0] * 0.5;
-            p.rdata(RealData::y) = plo[1] + dx[1] * 0.5;
-            p.rdata(RealData::z) = plo[2] + dx[2] * 0.5;
-            p.rdata(RealData::E_MeV) = 1.0;
-            p.rdata(RealData::phatx) = 1.0;
-            p.rdata(RealData::phaty) = 0.0;
-            p.rdata(RealData::phatz) = 0.0;
-            p.rdata(RealData::time_s) = 0.0;
-            p.rdata(RealData::N) = 1.0;
+                    p.rdata(RealData::x) = plo[0] + dx[0] * 0.5;
+                    p.rdata(RealData::y) = plo[1] + dx[1] * 0.5;
+                    p.rdata(RealData::z) = plo[2] + dx[2] * 0.5;
+                    p.rdata(RealData::E_MeV) = 1.0;
+                    p.rdata(RealData::phatx) = 1.0;
+                    p.rdata(RealData::phaty) = 0.0;
+                    p.rdata(RealData::phatz) = 0.0;
+                    p.rdata(RealData::time_s) = 0.0;
+                    p.rdata(RealData::N) = 1.0;
 
-            // AMREX_ASSERT(this->Index(p, lev) == iv);
+                    // AMREX_ASSERT(this->Index(p, lev) == iv);
 
-            particle_tile.push_back(p);
+                    particle_tile.push_back(p);
 
+                }
+            }
         }
     }
 }

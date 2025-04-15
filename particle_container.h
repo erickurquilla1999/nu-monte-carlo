@@ -6,7 +6,7 @@
 struct RealData
 {
     enum {
-        time = 0,
+        time_s = 0,
         x,
         y,
         z,

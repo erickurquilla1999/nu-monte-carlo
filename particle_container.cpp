@@ -63,7 +63,7 @@ MCParticleContainer::InitParticlesTest1(const int nbox, const int num_par_test_1
             p.rdata(RealData::phatx) = 1.0;
             p.rdata(RealData::phaty) = 0.0;
             p.rdata(RealData::phatz) = 0.0;
-            p.rdata(RealData::time) = 0.0;
+            p.rdata(RealData::time_s) = 0.0;
             p.rdata(RealData::N) = 1.0;
 
             // AMREX_ASSERT(this->Index(p, lev) == iv);

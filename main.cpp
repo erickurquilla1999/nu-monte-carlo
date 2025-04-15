@@ -5,6 +5,9 @@
 #include <AMReX_PlotFileUtil.H>
 
 #include "parameters.h"
+#include "particle_container.h"
+
+using namespace amrex;
 
 void evolve()
 {
@@ -69,6 +72,11 @@ void evolve()
     }
 
     WriteSingleLevelPlotfile("plt001", mf_absorption_imfp_cm, {"absorption_imfp_cm"}, geom, 0.0, 0);
+
+    // Create the particle container
+    MCParticleContainer particles(geom, distribution_mapping, domain_box_array);
+    particles.InitParticles();
+
 }
 
 int main (int argc, char* argv[])

@@ -73,6 +73,8 @@ void evolve()
 
     // print particles value
     particles.LoopParticlesPrint();
+    particles.MoveParticles(1.0e-11);
+    particles.LoopParticlesPrint();
 
 }
 

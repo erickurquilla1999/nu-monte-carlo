@@ -103,3 +103,30 @@ MCParticleContainer::LoopParticlesPrint()
         });
     }
 }
+
+void
+MCParticleContainer::MoveParticles(const amrex::Real dt)
+{
+    const int lev = 0;
+    for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
+    {
+        amrex::Print() << "Processing particle tile: " << pti.index() << ", " << pti.LocalTileIndex() << "\n";
+        const int np  = pti.numParticles();
+        amrex::Print() << "Number of particles in tile: " << np << "\n";
+        ParticleType* pstruct = &(pti.GetArrayOfStructs()[0]);
+
+        amrex::ParallelFor (np, [=] AMREX_GPU_DEVICE (int i) {
+
+            ParticleType& p = pstruct[i];
+
+            amrex::Real c_cm_s = 3.0e10; // speed of light in cm/s
+
+            p.rdata(RealData::x) += p.rdata(RealData::phatx) * dt * c_cm_s;
+            p.rdata(RealData::y) += p.rdata(RealData::phaty) * dt * c_cm_s;
+            p.rdata(RealData::z) += p.rdata(RealData::phatz) * dt * c_cm_s;
+            p.rdata(RealData::time_s) += dt;
+
+
+        });
+    }
+}

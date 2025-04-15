@@ -41,31 +41,41 @@ MCParticleContainer::InitParticlesTest1()
 
         auto& particle_tile = GetParticles(lev)[std::make_pair(grid_id,tile_id)];
 
-        for (IntVect iv = tile_box.smallEnd(); iv <= tile_box.bigEnd(); tile_box.next(iv))
-        {
-            for (int i_part=0; i_part<num_ppc;i_part++) {
-                
-                ParticleType p;
-                p.id()  = ParticleType::NextID();
-                p.cpu() = ParallelDescriptor::MyProc();
+        IntVect init_indx_cell_in_tile_box = tile_box.smallEnd();
 
-                p.pos(0) = 1.0;
-                p.pos(1) = 1.0;
-                p.pos(2) = 1.0;
+        amrex::Print() << "IntVect init_indx_cell_in_tile_box: (" << init_indx_cell_in_tile_box[0] << ", " << init_indx_cell_in_tile_box[1] << ", " << init_indx_cell_in_tile_box[2] << ")\n";
 
-                // p.rdata(RealData::vx) = u[0];
-                // p.rdata(RealData::vy) = u[1];
-                // p.rdata(RealData::vz) = u[2];
+        for (int i_part=0; i_part<num_ppc;i_part++) {
 
-                // AMREX_ASSERT(this->Index(p, lev) == iv);
+            ParticleType p;
 
-                particle_tile.push_back(p);
-            }
+            p.id()  = ParticleType::NextID();
+            p.cpu() = ParallelDescriptor::MyProc();
+
+            p.pos(0) = plo[0] + (init_indx_cell_in_tile_box[0] + 0.5) * dx[0]; 
+            p.pos(1) = plo[1] + (init_indx_cell_in_tile_box[1] + 0.5) * dx[1];
+            p.pos(2) = plo[2] + (init_indx_cell_in_tile_box[2] + 0.5) * dx[2];
+
+            p.rdata(RealData::x) = plo[0] + dx[0] * 0.5;
+            p.rdata(RealData::y) = plo[1] + dx[1] * 0.5;
+            p.rdata(RealData::z) = plo[2] + dx[2] * 0.5;
+
+            // AMREX_ASSERT(this->Index(p, lev) == iv);
+
+            particle_tile.push_back(p);
+
         }
+
     }
 
 
 }
+
+
+
+
+
+
 
 void
 MCParticleContainer::LoopParticlesPrint()
@@ -80,11 +90,17 @@ MCParticleContainer::LoopParticlesPrint()
 
             ParticleType& p = pstruct[i];
 
-            printf("Particle position: (%f, %f, %f)\n",
+            printf("Particle position pos: (%f, %f, %f)\n",
                    p.pos(0),
                    p.pos(1),
                    p.pos(2));
+            printf("Particle position rea: (%f, %f, %f)\n",
+                    p.rdata(RealData::x),
+                    p.rdata(RealData::y),
+                    p.rdata(RealData::z));
 
+            printf("p.id(): %d\n", p.id());
+            printf("p.cpu(): %d\n", p.cpu());
         });
     }
 }

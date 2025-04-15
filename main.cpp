@@ -33,6 +33,10 @@ void evolve()
     // Create the distribution mapping
     amrex::DistributionMapping distribution_mapping(domain_box_array);
 
+    const int num_boxes = domain_box_array.size();
+    amrex::Print() << "Number of boxes: " << num_boxes << "\n";
+
+
     int number_componets = 1;
     int number_ghost_cells = 0;
 

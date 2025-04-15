@@ -65,8 +65,6 @@ void evolve()
         });
     }
 
-    WriteSingleLevelPlotfile("plt001", mf_absorption_imfp_cm, {"absorption_imfp_cm"}, geom, 0.0, 0);
-
     // Create the particle container
     MCParticleContainer particles(geom, distribution_mapping, domain_box_array);
     particles.InitParticlesTest1(num_boxes, params.test_1_n_particles);
@@ -75,6 +73,9 @@ void evolve()
     particles.LoopParticlesPrint();
     particles.MoveParticles(params.time_step_s);
     particles.LoopParticlesPrint();
+
+    WriteSingleLevelPlotfile("plt001", mf_absorption_imfp_cm, {"absorption_imfp_cm"}, geom, 0.0, 0);
+    particles.Checkpoint("plt001", "particle0");
 
 }
 

@@ -17,7 +17,7 @@ MCParticleContainer(const Geometry            & a_geom,
 }
 
 void
-MCParticleContainer::InitParticlesTest1()
+MCParticleContainer::InitParticlesTest1(const int nbox, const int num_par_test_1)
 {
     const int lev = 0;
     const Geometry& geom = Geom(lev);
@@ -26,8 +26,8 @@ MCParticleContainer::InitParticlesTest1()
     const Real* plo = geom.ProbLo();
     amrex::Print() << "ProbLo (plo): " << plo[0] << ", " << plo[1] << ", " << plo[2] << "\n";
 
-
-    const int num_ppc = 10;
+    const int num_par_per_tile = num_par_test_1 / nbox;
+    amrex::Print() << "Number of particles per tile: " << num_par_per_tile << "\n";
 
     for (MFIter mfi = MakeMFIter(lev); mfi.isValid(); ++mfi)
     {
@@ -45,7 +45,7 @@ MCParticleContainer::InitParticlesTest1()
 
         amrex::Print() << "IntVect init_indx_cell_in_tile_box: (" << init_indx_cell_in_tile_box[0] << ", " << init_indx_cell_in_tile_box[1] << ", " << init_indx_cell_in_tile_box[2] << ")\n";
 
-        for (int i_part=0; i_part<num_ppc;i_part++) {
+        for (int i_part=0; i_part<num_par_per_tile;i_part++) {
 
             ParticleType p;
 
@@ -65,17 +65,8 @@ MCParticleContainer::InitParticlesTest1()
             particle_tile.push_back(p);
 
         }
-
     }
-
-
 }
-
-
-
-
-
-
 
 void
 MCParticleContainer::LoopParticlesPrint()
@@ -83,7 +74,9 @@ MCParticleContainer::LoopParticlesPrint()
     const int lev = 0;
     for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
     {
+        amrex::Print() << "Processing particle tile: " << pti.index() << ", " << pti.LocalTileIndex() << "\n";
         const int np  = pti.numParticles();
+        amrex::Print() << "Number of particles in tile: " << np << "\n";
         ParticleType* pstruct = &(pti.GetArrayOfStructs()[0]);
 
         amrex::ParallelFor (np, [=] AMREX_GPU_DEVICE (int i) {

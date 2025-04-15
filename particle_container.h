@@ -10,10 +10,11 @@ struct RealData
         x,
         y,
         z,
-        pupx,
-        pupy,
-        pupz,
-        pupt,
+        phatx,
+        phaty,
+        phatz,
+        E_MeV,
+        N,
         ncomps
     };
 };
@@ -42,6 +43,8 @@ public:
     void InitParticlesTest1(const int nbox, const int num_par_test_1);
 
     void LoopParticlesPrint();
+
+    void MoveParticles(const amrex::Real dt);
 
 };
 

@@ -1,2 +1,2 @@
-CEXE_sources += main.cpp particle_container.cpp
-CEXE_headers += parameters.h particle_container.h
+CEXE_sources += main.cpp particle_container.cpp matter.cpp
+CEXE_headers += parameters.h particle_container.h matter.h

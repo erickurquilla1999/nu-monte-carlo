@@ -6,6 +6,7 @@
 
 #include "parameters.h"
 #include "particle_container.h"
+#include "matter.h"
 
 using namespace amrex;
 
@@ -40,10 +41,7 @@ void evolve()
     int number_componets = 1;
     int number_ghost_cells = 0;
 
-    amrex::MultiFab mf_Ye(domain_box_array, distribution_mapping, number_componets, number_ghost_cells);
-    amrex::MultiFab mf_rho_g_ccm(domain_box_array, distribution_mapping, number_componets, number_ghost_cells);
-    amrex::MultiFab mf_T_MeV(domain_box_array, distribution_mapping, number_componets, number_ghost_cells);
-    amrex::MultiFab mf_absorption_imfp_cm(domain_box_array, distribution_mapping, number_componets, number_ghost_cells);
+    amrex::MultiFab matter_mfab(domain_box_array, distribution_mapping, MatterData::ncomps, 0);
 
     amrex::RealBox real_box({AMREX_D_DECL(0.0, 0.0, 0.0)},
                             {AMREX_D_DECL(params.input_physical_domain_size_x_cm, params.input_physical_domain_size_y_cm, params.input_physical_domain_size_z_cm)});
@@ -51,19 +49,8 @@ void evolve()
     amrex::Geometry geom(domain_box, &real_box);
     amrex::GpuArray<amrex::Real, AMREX_SPACEDIM> cell_size_cm = geom.CellSizeArray();
 
-    for (amrex::MFIter mfi(mf_absorption_imfp_cm); mfi.isValid(); ++mfi) {
-        const amrex::Box& bx = mfi.validbox();
-        const amrex::Array4<amrex::Real>& mf_array_absorption_imfp_cm = mf_absorption_imfp_cm.array(mfi);
-
-        amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) {
-
-            amrex::Real x = (i + 0.5) * cell_size_cm[0];
-            amrex::Real y = (j + 0.5) * cell_size_cm[1];
-            amrex::Real z = (k + 0.5) * cell_size_cm[2];
-
-            mf_array_absorption_imfp_cm(i,j,k) = x; // Set the value of the MultiFab to 1.0
-        });
-    }
+    // Initialize the bakground matter conditions
+    init_matter(matter_mfab);
 
     // Create the particle container
     MCParticleContainer particles(geom, distribution_mapping, domain_box_array);
@@ -74,7 +61,7 @@ void evolve()
     particles.MoveParticles(params.time_step_s);
     particles.LoopParticlesPrint();
 
-    WriteSingleLevelPlotfile("plt001", mf_absorption_imfp_cm, {"absorption_imfp_cm"}, geom, 0.0, 0);
+    WriteSingleLevelPlotfile("plt001", matter_mfab, {"matter_mfab"}, geom, 0.0, 0);
     particles.Checkpoint("plt001", "particle0");
 
 }

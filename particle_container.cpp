@@ -17,7 +17,7 @@ MCParticleContainer(const Geometry            & a_geom,
 }
 
 void
-MCParticleContainer::InitParticlesTest1(const int nbox, const int num_par_test_1)
+MCParticleContainer::InitParticlesTest1(const int num_par_test_1)
 {
     const int lev = 0;
     const Geometry& geom = Geom(lev);
@@ -25,9 +25,6 @@ MCParticleContainer::InitParticlesTest1(const int nbox, const int num_par_test_1
     amrex::Print() << "Cell size (dx): " << dx[0] << ", " << dx[1] << ", " << dx[2] << "\n";
     const Real* plo = geom.ProbLo();
     amrex::Print() << "ProbLo (plo): " << plo[0] << ", " << plo[1] << ", " << plo[2] << "\n";
-
-    const int num_par_per_tile = num_par_test_1 / nbox;
-    amrex::Print() << "Number of particles per tile: " << num_par_per_tile << "\n";
 
     for (MFIter mfi = MakeMFIter(lev); mfi.isValid(); ++mfi)
     {
@@ -46,7 +43,7 @@ MCParticleContainer::InitParticlesTest1(const int nbox, const int num_par_test_1
 
             if (iv[0] == 0 && iv[1] == 0 && iv[2] == 0) {
 
-                for (int i_part=0; i_part<num_par_per_tile;i_part++) {
+                for (int i_part=0; i_part<num_par_test_1;i_part++) {
 
                     ParticleType p;
 

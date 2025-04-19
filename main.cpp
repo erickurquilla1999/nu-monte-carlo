@@ -66,8 +66,8 @@ void evolve()
     }
     particles.LoopParticlesPrint();
 
-    WriteSingleLevelPlotfile("plt001", matter_mfab, {"matter_mfab"}, geom, 0.0, 0);
-    particles.Checkpoint("plt001", "particle0");
+    // WriteSingleLevelPlotfile("plt001", matter_mfab, {"matter_mfab"}, geom, 0.0, 0);
+    // particles.Checkpoint("plt001", "particle0");
 
 }
 

@@ -2,7 +2,7 @@ input_n_cell_x = 10  # Number of cells in the x-direction
 input_n_cell_y = 1  # Number of cells in the y-direction
 input_n_cell_z = 1  # Number of cells in the z-direction
 
-input_max_grid_size_x = 5  # Maximum grid size subdivisions in x of the domain for parallelization
+input_max_grid_size_x = 2  # Maximum grid size subdivisions in x of the domain for parallelization
 input_max_grid_size_y = 1  # Maximum grid size subdivisions in y of the domain for parallelization
 input_max_grid_size_z = 1  # Maximum grid size subdivisions in z of the domain for parallelization
 
@@ -12,5 +12,5 @@ input_physical_domain_size_z_cm = 1.0  # Physical domain size in the z-direction
 
 test_1_n_particles = 1 # Number of particles to be created for test one
 
-n_steps = 100 # Number of steps to run
+n_steps = 35 # Number of steps to run
 time_step_s = 1.0e-11  # Time step in seconds

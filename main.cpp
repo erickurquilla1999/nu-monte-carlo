@@ -63,6 +63,8 @@ void evolve()
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {
         amrex::Print() << "Step: " << i_step << "\n";
         particles.MoveParticles(params.time_step_s);
+        particles.Redistribute();
+        particles.LoopParticlesPrint();
     }
     particles.LoopParticlesPrint();
 

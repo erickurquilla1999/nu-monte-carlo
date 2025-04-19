@@ -121,6 +121,10 @@ MCParticleContainer::MoveParticles(const amrex::Real dt)
 
             amrex::Real c_cm_s = 3.0e10; // speed of light in cm/s
 
+            p.pos(0) += p.rdata(RealData::phatx) * dt * c_cm_s;
+            p.pos(0) += p.rdata(RealData::phaty) * dt * c_cm_s;
+            p.pos(0) += p.rdata(RealData::phatz) * dt * c_cm_s;
+
             p.rdata(RealData::x) += p.rdata(RealData::phatx) * dt * c_cm_s;
             p.rdata(RealData::y) += p.rdata(RealData::phaty) * dt * c_cm_s;
             p.rdata(RealData::z) += p.rdata(RealData::phatz) * dt * c_cm_s;

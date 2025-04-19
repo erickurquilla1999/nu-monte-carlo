@@ -58,7 +58,12 @@ void evolve()
 
     // print particles value
     particles.LoopParticlesPrint();
-    particles.MoveParticles(params.time_step_s);
+
+    // Loop over the number of steps
+    for (int i_step = 0; i_step < params.n_steps; ++i_step) {
+        amrex::Print() << "Step: " << i_step << "\n";
+        particles.MoveParticles(params.time_step_s);
+    }
     particles.LoopParticlesPrint();
 
     WriteSingleLevelPlotfile("plt001", matter_mfab, {"matter_mfab"}, geom, 0.0, 0);

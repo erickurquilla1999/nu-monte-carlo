@@ -98,8 +98,8 @@ MCParticleContainer::LoopParticlesPrint()
                     p.rdata(RealData::y),
                     p.rdata(RealData::z));
 
-            printf("p.id(): %d\n", p.id());
-            printf("p.cpu(): %d\n", p.cpu());
+            printf("p.id(): %d\n", static_cast<int>(p.id()));
+            printf("p.cpu(): %d\n", static_cast<int>(p.cpu()));
         });
     }
 }

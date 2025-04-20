@@ -15,6 +15,8 @@ struct RealData
         phatz,
         E_MeV,
         N,
+        tau,
+        tau_limit,
         ncomps
     };
 };

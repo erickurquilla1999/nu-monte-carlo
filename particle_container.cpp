@@ -60,11 +60,11 @@ MCParticleContainer::InsertParticles(const int num_par_test_1, amrex::Real curre
                     p.id()  = ParticleType::NextID();
                     p.cpu() = ParallelDescriptor::MyProc();
 
-                    p.pos(0) = plo[0] + dx[0] * 0.5; 
+                    p.pos(0) = plo[0] + dx[1]*1e-3;
                     p.pos(1) = plo[1] + dx[1] * 0.5;
                     p.pos(2) = plo[2] + dx[2] * 0.5;
 
-                    p.rdata(RealData::x) = plo[0] + dx[0] * 0.5;
+                    p.rdata(RealData::x) = plo[0] + dx[1]*1e-3;
                     p.rdata(RealData::y) = plo[1] + dx[1] * 0.5;
                     p.rdata(RealData::z) = plo[2] + dx[2] * 0.5;
                     p.rdata(RealData::E_MeV) = 1.0;

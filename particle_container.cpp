@@ -94,7 +94,7 @@ void
 MCParticleContainer::LoopParticlesPrint()
 {
  
-    printf("time_s x y z phatx phaty phatz E_MeV N\n");
+    printf("time_s x y z phatx phaty phatz E_MeV N tau tau_limit i j k\n");
 
     const int lev = 0;
     for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
@@ -180,18 +180,10 @@ MCParticleContainer::UpdateCellIndex()
     for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
     {
 
-        // amrex::Print() << "Cell size (dx): " << dx_local[0] << ", " << dx_local[1] << ", " << dx_local[2] << "\n";
-        // amrex::Print() << "ProbLo (plo): " << plo_local[0] << ", " << plo_local[1] << ", " << plo_local[2] << "\n";
-
         const int np  = pti.numParticles();
         ParticleType* pstruct = &(pti.GetArrayOfStructs()[0]);
 
         amrex::ParallelFor (np, [=] AMREX_GPU_DEVICE (int i) {
-
-            printf("imin");
-            printf("Cell size (dx): %f, %f, %f\n", dx_local[0], dx_local[1], dx_local[2]);
-            printf("ProbLo (plo): %f, %f, %f\n", plo_local[0], plo_local[1], plo_local[2]);
-
             ParticleType& p = pstruct[i];
 
             p.idata(IntData::i) = amrex::Math::floor((p.pos(0) - plo_local[0]) / dx_local[0]);

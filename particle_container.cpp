@@ -115,18 +115,21 @@ MCParticleContainer::LoopParticlesPrint()
             // printf("p.id(): %d\n", static_cast<int>(p.id()));
             // printf("p.cpu(): %d\n", static_cast<int>(p.cpu()));
 
-            printf("%.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e\n",
-                   p.rdata(RealData::time_s),
-                   p.rdata(RealData::x),
-                   p.rdata(RealData::y),
-                   p.rdata(RealData::z),
-                   p.rdata(RealData::phatx),
-                   p.rdata(RealData::phaty),
-                   p.rdata(RealData::phatz),
-                   p.rdata(RealData::E_MeV),
-                   p.rdata(RealData::N),
-                   p.rdata(RealData::tau),
-                   p.rdata(RealData::tau_limit)
+            printf("%.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %d %d %d\n",
+                p.rdata(RealData::time_s),
+                p.rdata(RealData::x),
+                p.rdata(RealData::y),
+                p.rdata(RealData::z),
+                p.rdata(RealData::phatx),
+                p.rdata(RealData::phaty),
+                p.rdata(RealData::phatz),
+                p.rdata(RealData::E_MeV),
+                p.rdata(RealData::N),
+                p.rdata(RealData::tau),
+                p.rdata(RealData::tau_limit),
+                static_cast<int>(p.idata(IntData::i)),
+                static_cast<int>(p.idata(IntData::j)),
+                static_cast<int>(p.idata(IntData::k))
                 );
 
 

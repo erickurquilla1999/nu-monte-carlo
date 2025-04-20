@@ -17,7 +17,7 @@ MCParticleContainer(const Geometry            & a_geom,
 }
 
 void
-MCParticleContainer::InitParticlesTest1(const int num_par_test_1)
+MCParticleContainer::InsertParticles(const int num_par_test_1)
 {
     const int lev = 0;
     const Geometry& geom = Geom(lev);

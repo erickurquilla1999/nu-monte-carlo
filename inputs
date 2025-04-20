@@ -12,5 +12,5 @@ input_physical_domain_size_z_cm = 1.0  # Physical domain size in the z-direction
 
 test_1_n_particles = 1 # Number of particles to be created for test one
 
-n_steps = 1 # Number of steps to run
+n_steps = 3 # Number of steps to run
 time_step_s = 1.0e-11  # Time step in seconds

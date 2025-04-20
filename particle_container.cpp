@@ -77,29 +77,40 @@ MCParticleContainer::InsertParticles(const int num_par_test_1)
 void
 MCParticleContainer::LoopParticlesPrint()
 {
+ 
+    printf("time_s x y z phatx phaty phatz E_MeV N\n");
+
     const int lev = 0;
     for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
     {
-        amrex::Print() << "Processing particle tile: " << pti.index() << ", " << pti.LocalTileIndex() << "\n";
+        // amrex::Print() << "Processing particle tile: " << pti.index() << ", " << pti.LocalTileIndex() << "\n";
         const int np  = pti.numParticles();
-        amrex::Print() << "Number of particles in tile: " << np << "\n";
+        // amrex::Print() << "Number of particles in tile: " << np << "\n";
         ParticleType* pstruct = &(pti.GetArrayOfStructs()[0]);
 
         amrex::ParallelFor (np, [=] AMREX_GPU_DEVICE (int i) {
 
             ParticleType& p = pstruct[i];
 
-            printf("Particle position pos: (%f, %f, %f)\n",
-                   p.pos(0),
-                   p.pos(1),
-                   p.pos(2));
-            printf("Particle position rea: (%f, %f, %f)\n",
-                    p.rdata(RealData::x),
-                    p.rdata(RealData::y),
-                    p.rdata(RealData::z));
+            // printf("Particle position pos: (%f, %f, %f)\n",
+            //        p.pos(0),
+            //        p.pos(1),
+            //        p.pos(2));
+            // printf("p.id(): %d\n", static_cast<int>(p.id()));
+            // printf("p.cpu(): %d\n", static_cast<int>(p.cpu()));
 
-            printf("p.id(): %d\n", static_cast<int>(p.id()));
-            printf("p.cpu(): %d\n", static_cast<int>(p.cpu()));
+            printf("%.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e\n",
+                   p.rdata(RealData::time_s),
+                   p.rdata(RealData::x),
+                   p.rdata(RealData::y),
+                   p.rdata(RealData::z),
+                   p.rdata(RealData::phatx),
+                   p.rdata(RealData::phaty),
+                   p.rdata(RealData::phatz),
+                   p.rdata(RealData::E_MeV),
+                   p.rdata(RealData::N));
+
+
         });
     }
 }

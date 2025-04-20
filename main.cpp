@@ -62,10 +62,9 @@ void evolve()
         particles.Redistribute();
         particles.InsertParticles(params.test_1_n_particles);
         particles.UpdateCellIndex();
+        particles.LoopParticlesPrint();
         // particles.MoveParticles(params.time_step_s);
         MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
-        particles.UpdateCellIndex();
-        particles.LoopParticlesPrint();
     }
 
     // WriteSingleLevelPlotfile("plt001", matter_mfab, {"matter_mfab"}, geom, 0.0, 0);

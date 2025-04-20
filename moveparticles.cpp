@@ -5,6 +5,7 @@
 
 # include "moveparticles.h"
 #include "particle_container.h"
+#include "matter.h"
 
 void MoveParticlesMC(MCParticleContainer& particles, const amrex::MultiFab& state, const amrex::Geometry& geom, const amrex::Real dt)
 {
@@ -21,22 +22,8 @@ void MoveParticlesMC(MCParticleContainer& particles, const amrex::MultiFab& stat
     [=] AMREX_GPU_DEVICE (MCParticleContainer::ParticleType& p,
                           amrex::Array4<const amrex::Real> const& sarr)
     {
+        amrex::Real imfp_cm = sarr(p.idata(IntData::i), p.idata(IntData::j), p.idata(IntData::k), MatterData::IMFP_cm);
 
-        
-        
-        // // The following variables contains temperature, electron fraction, and density interpolated from grid quantities to particle positions
-        // Real T_pp = 0; // erg
-        // Real Ye_pp = 0;
-        // Real rho_pp = 0; // g/ccm
-
-        // for (int k = sz.first(); k <= sz.last(); ++k) {
-        //     for (int j = sy.first(); j <= sy.last(); ++j) {
-        //         for (int i = sx.first(); i <= sx.last(); ++i) {
-        //             #include "generated_files/Evolve.cpp_interpolate_from_mesh_fill"
-        //         }
-        //     }
-        // }
-        
         amrex::Real c_cm_s = 3.0e10; // speed of light in cm/s
 
         p.pos(0) += p.rdata(RealData::phatx) * dt * c_cm_s;
@@ -48,6 +35,13 @@ void MoveParticlesMC(MCParticleContainer& particles, const amrex::MultiFab& stat
         p.rdata(RealData::z) += p.rdata(RealData::phatz) * dt * c_cm_s;
         p.rdata(RealData::time_s) += dt;
 
+        p.rdata(RealData::tau) += c_cm_s * dt * imfp_cm;
+
+        if (p.rdata(RealData::tau) > p.rdata(RealData::tau_limit)) {
+            p.pos(0) = -1.0;
+            p.pos(1) = -1.0;
+            p.pos(2) = -1.0;
+        }
         
     });
 }

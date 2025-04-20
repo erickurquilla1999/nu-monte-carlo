@@ -75,6 +75,10 @@ MCParticleContainer::InsertParticles(const int num_par_test_1)
                     p.rdata(RealData::N) = 1.0;
                     p.rdata(RealData::tau) = 0.0;
                     p.rdata(RealData::tau_limit) = -std::log(amrex::Random());
+                    
+                    p.idata(IntData::i) = iv[0];
+                    p.idata(IntData::j) = iv[1];
+                    p.idata(IntData::k) = iv[2];
 
                     // AMREX_ASSERT(this->Index(p, lev) == iv);
 

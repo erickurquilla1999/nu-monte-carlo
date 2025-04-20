@@ -15,9 +15,6 @@ void MoveParticlesMC(MCParticleContainer& particles, const amrex::MultiFab& stat
     amrex::Real dx_local[3] = {dx[0], dx[1], dx[2]};
     amrex::Real plo_local[3] = {plo[0], plo[1], plo[2]};
 
-    amrex::Print() << "dx: " << dx_local[0] << ", " << dx_local[1] << ", " << dx_local[2] << "\n";
-    amrex::Print() << "plo: " << plo_local[0] << ", " << plo_local[1] << ", " << plo_local[2] << "\n";
-    
     amrex::MeshToParticle(particles, state, 0,
     [=] AMREX_GPU_DEVICE (MCParticleContainer::ParticleType& p,
                           amrex::Array4<const amrex::Real> const& sarr)

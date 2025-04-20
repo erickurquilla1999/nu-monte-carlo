@@ -7,6 +7,7 @@
 #include "parameters.h"
 #include "particle_container.h"
 #include "matter.h"
+#include "moveparticles.h"
 
 using namespace amrex;
 
@@ -61,7 +62,8 @@ void evolve()
         particles.Redistribute();
         particles.InsertParticles(params.test_1_n_particles);
         particles.UpdateCellIndex();
-        particles.MoveParticles(params.time_step_s);
+        // particles.MoveParticles(params.time_step_s);
+        MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
         particles.UpdateCellIndex();
         particles.LoopParticlesPrint();
     }

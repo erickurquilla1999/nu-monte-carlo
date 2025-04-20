@@ -1,3 +1,3 @@
-CEXE_sources += main.cpp particle_container.cpp matter.cpp
-CEXE_headers += parameters.h particle_container.h matter.h
+CEXE_sources += main.cpp particle_container.cpp matter.cpp moveparticles.cpp
+CEXE_headers += parameters.h particle_container.h matter.h moveparticles.h
 CXXFLAGS += -DEBUG

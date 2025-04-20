@@ -42,7 +42,7 @@ public:
                         const amrex::DistributionMapping & a_dmap,
                         const amrex::BoxArray            & a_ba);
 
-    void InsertParticles(const int num_par_test_1);
+    void InsertParticles(const int num_par_test_1, amrex::Real current_time_s);
 
     void LoopParticlesPrint();
 

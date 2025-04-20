@@ -56,15 +56,18 @@ void evolve()
     // Create the particle container
     MCParticleContainer particles(geom, distribution_mapping, domain_box_array);
 
+    amrex::Real time_phys_s = 0.0; // speed of light in cm/s
+
     // Loop over the number of steps
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {
         amrex::Print() << "Step: " << i_step << "\n";
         particles.Redistribute();
-        particles.InsertParticles(params.test_1_n_particles);
+        particles.InsertParticles(params.test_1_n_particles, time_phys_s);
         particles.UpdateCellIndex();
         particles.LoopParticlesPrint();
         // particles.MoveParticles(params.time_step_s);
         MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
+        time_phys_s += params.time_step_s;
     }
 
     // WriteSingleLevelPlotfile("plt001", matter_mfab, {"matter_mfab"}, geom, 0.0, 0);

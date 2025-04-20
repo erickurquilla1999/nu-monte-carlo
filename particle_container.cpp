@@ -17,7 +17,7 @@ MCParticleContainer(const Geometry            & a_geom,
 }
 
 void
-MCParticleContainer::InsertParticles(const int num_par_test_1)
+MCParticleContainer::InsertParticles(const int num_par_test_1, amrex::Real current_time_s)
 {
     const int lev = 0;
     const Geometry& geom = Geom(lev);
@@ -71,7 +71,7 @@ MCParticleContainer::InsertParticles(const int num_par_test_1)
                     p.rdata(RealData::phatx) = 1.0;
                     p.rdata(RealData::phaty) = 0.0;
                     p.rdata(RealData::phatz) = 0.0;
-                    p.rdata(RealData::time_s) = 0.0;
+                    p.rdata(RealData::time_s) = current_time_s;
                     p.rdata(RealData::N) = 1.0;
                     p.rdata(RealData::tau) = 0.0;
                     p.rdata(RealData::tau_limit) = -std::log(amrex::Random());

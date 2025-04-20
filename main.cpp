@@ -37,10 +37,6 @@ void evolve()
     const int num_boxes = domain_box_array.size();
     amrex::Print() << "Number of boxes: " << num_boxes << "\n";
 
-
-    int number_componets = 1;
-    int number_ghost_cells = 0;
-
     amrex::MultiFab matter_mfab(domain_box_array, distribution_mapping, MatterData::ncomps, 0);
 
     amrex::RealBox real_box({AMREX_D_DECL(0.0, 0.0, 0.0)},

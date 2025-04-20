@@ -22,9 +22,13 @@ MCParticleContainer::InsertParticles(const int num_par_test_1)
     const int lev = 0;
     const Geometry& geom = Geom(lev);
     const Real* dx = geom.CellSize();
-    amrex::Print() << "Cell size (dx): " << dx[0] << ", " << dx[1] << ", " << dx[2] << "\n";
     const Real* plo = geom.ProbLo();
-    amrex::Print() << "ProbLo (plo): " << plo[0] << ", " << plo[1] << ", " << plo[2] << "\n";
+
+    #ifdef DEBUG
+        amrex::Print() << "Cell size (dx): " << dx[0] << ", " << dx[1] << ", " << dx[2] << "\n";
+        amrex::Print() << "ProbLo (plo): " << plo[0] << ", " << plo[1] << ", " << plo[2] << "\n";
+    #endif
+
 
     for (MFIter mfi = MakeMFIter(lev); mfi.isValid(); ++mfi)
     {
@@ -32,14 +36,20 @@ MCParticleContainer::InsertParticles(const int num_par_test_1)
         const RealBox tile_realbox{tile_box, geom.CellSize(), geom.ProbLo()};
 
         const int grid_id = mfi.index();
-        amrex::Print() << "Grid ID: " << grid_id << "\n";
         const int tile_id = mfi.LocalTileIndex();
-        amrex::Print() << "Tile ID: " << tile_id << "\n";
+
+        #ifdef DEBUG
+            amrex::Print() << "Grid ID: " << grid_id << "\n";
+            amrex::Print() << "Tile ID: " << tile_id << "\n";
+        #endif
+
         auto& particle_tile = GetParticles(lev)[std::make_pair(grid_id,tile_id)];
 
         for (IntVect iv = tile_box.smallEnd(); iv <= tile_box.bigEnd(); tile_box.next(iv))
         {
-            amrex::Print() << "IntVect iv: (" << iv[0] << ", " << iv[1] << ", " << iv[2] << ")\n";
+            #ifdef DEBUG
+                amrex::Print() << "IntVect iv: (" << iv[0] << ", " << iv[1] << ", " << iv[2] << ")\n";
+            #endif
 
             if (iv[0] == 0 && iv[1] == 0 && iv[2] == 0) {
 
@@ -123,9 +133,8 @@ MCParticleContainer::MoveParticles(const amrex::Real dt)
     const int lev = 0;
     for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
     {
-        amrex::Print() << "Processing particle tile: " << pti.index() << ", " << pti.LocalTileIndex() << "\n";
+
         const int np  = pti.numParticles();
-        amrex::Print() << "Number of particles in tile: " << np << "\n";
         ParticleType* pstruct = &(pti.GetArrayOfStructs()[0]);
 
         amrex::ParallelFor (np, [=] AMREX_GPU_DEVICE (int i) {

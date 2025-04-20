@@ -12,7 +12,9 @@ using namespace amrex;
 
 void evolve()
 {
-    amrex::Print() << "AMReX version " << amrex::Version() << "\n";
+    #ifdef DEBUG
+        amrex::Print() << "AMReX version " << amrex::Version() << "\n";
+    #endif
 
     // Get the simulation parameters
     Parameters_struct params;
@@ -35,7 +37,10 @@ void evolve()
     amrex::DistributionMapping distribution_mapping(domain_box_array);
 
     const int num_boxes = domain_box_array.size();
-    amrex::Print() << "Number of boxes: " << num_boxes << "\n";
+
+    #ifdef DEBUG
+        amrex::Print() << "Number of boxes: " << num_boxes << "\n";
+    #endif
 
     amrex::MultiFab matter_mfab(domain_box_array, distribution_mapping, MatterData::ncomps, 0);
 
@@ -43,7 +48,6 @@ void evolve()
                             {AMREX_D_DECL(params.input_physical_domain_size_x_cm, params.input_physical_domain_size_y_cm, params.input_physical_domain_size_z_cm)});
 
     amrex::Geometry geom(domain_box, &real_box);
-    amrex::GpuArray<amrex::Real, AMREX_SPACEDIM> cell_size_cm = geom.CellSizeArray();
 
     // Initialize the bakground matter conditions
     init_matter(matter_mfab);

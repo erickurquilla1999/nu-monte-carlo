@@ -74,7 +74,7 @@ MCParticleContainer::InsertParticles(const int num_par_test_1)
                     p.rdata(RealData::time_s) = 0.0;
                     p.rdata(RealData::N) = 1.0;
                     p.rdata(RealData::tau) = 0.0;
-                    p.rdata(RealData::tau_limit) = 1.0;
+                    p.rdata(RealData::tau_limit) = -std::log(amrex::Random());
 
                     // AMREX_ASSERT(this->Index(p, lev) == iv);
 
@@ -111,7 +111,7 @@ MCParticleContainer::LoopParticlesPrint()
             // printf("p.id(): %d\n", static_cast<int>(p.id()));
             // printf("p.cpu(): %d\n", static_cast<int>(p.cpu()));
 
-            printf("%.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e\n",
+            printf("%.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e %.10e\n",
                    p.rdata(RealData::time_s),
                    p.rdata(RealData::x),
                    p.rdata(RealData::y),
@@ -120,7 +120,10 @@ MCParticleContainer::LoopParticlesPrint()
                    p.rdata(RealData::phaty),
                    p.rdata(RealData::phatz),
                    p.rdata(RealData::E_MeV),
-                   p.rdata(RealData::N));
+                   p.rdata(RealData::N),
+                   p.rdata(RealData::tau),
+                   p.rdata(RealData::tau_limit)
+                );
 
 
         });

@@ -166,3 +166,38 @@ MCParticleContainer::MoveParticles(const amrex::Real dt)
         });
     }
 }
+
+void
+MCParticleContainer::UpdateCellIndex()
+{
+    const int lev = 0;
+    const Geometry& geom = Geom(lev);
+    const Real* dx = geom.CellSize();
+    const Real* plo = geom.ProbLo();
+    Real dx_local[3] = {dx[0], dx[1], dx[2]};
+    Real plo_local[3] = {plo[0], plo[1], plo[2]};
+
+    for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
+    {
+
+        // amrex::Print() << "Cell size (dx): " << dx_local[0] << ", " << dx_local[1] << ", " << dx_local[2] << "\n";
+        // amrex::Print() << "ProbLo (plo): " << plo_local[0] << ", " << plo_local[1] << ", " << plo_local[2] << "\n";
+
+        const int np  = pti.numParticles();
+        ParticleType* pstruct = &(pti.GetArrayOfStructs()[0]);
+
+        amrex::ParallelFor (np, [=] AMREX_GPU_DEVICE (int i) {
+
+            printf("imin");
+            printf("Cell size (dx): %f, %f, %f\n", dx_local[0], dx_local[1], dx_local[2]);
+            printf("ProbLo (plo): %f, %f, %f\n", plo_local[0], plo_local[1], plo_local[2]);
+
+            ParticleType& p = pstruct[i];
+
+            p.idata(IntData::i) = amrex::Math::floor((p.pos(0) - plo_local[0]) / dx_local[0]);
+            p.idata(IntData::j) = static_cast<int>( (p.pos(1) - plo_local[1]) / dx_local[1] );
+            p.idata(IntData::k) = static_cast<int>( (p.pos(2) - plo_local[2]) / dx_local[2] );
+
+        });
+    }
+}

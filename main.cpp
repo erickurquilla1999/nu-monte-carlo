@@ -54,17 +54,15 @@ void evolve()
 
     // Create the particle container
     MCParticleContainer particles(geom, distribution_mapping, domain_box_array);
-    particles.InsertParticles(params.test_1_n_particles);
-
-    // print particles value
-    particles.LoopParticlesPrint();
 
     // Loop over the number of steps
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {
         amrex::Print() << "Step: " << i_step << "\n";
-        particles.MoveParticles(params.time_step_s);
-        particles.InsertParticles(params.test_1_n_particles);
         particles.Redistribute();
+        particles.InsertParticles(params.test_1_n_particles);
+        particles.UpdateCellIndex();
+        particles.MoveParticles(params.time_step_s);
+        particles.UpdateCellIndex();
         particles.LoopParticlesPrint();
     }
 

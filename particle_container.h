@@ -48,6 +48,8 @@ public:
 
     void MoveParticles(const amrex::Real dt);
 
+    void UpdateCellIndex();
+
 };
 
 #endif

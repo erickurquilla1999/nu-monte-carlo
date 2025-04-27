@@ -3,7 +3,7 @@
 #include "AMReX_ParticleContainer.H"
 #include <AMReX.H>
 
-# include "moveparticles.h"
+# include "particle_interactions.h"
 #include "particle_container.h"
 #include "matter.h"
 #include "constant.h"

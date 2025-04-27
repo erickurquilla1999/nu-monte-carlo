@@ -7,7 +7,7 @@
 #include "parameters.h"
 #include "particle_container.h"
 #include "matter.h"
-#include "moveparticles.h"
+#include "particle_interactions.h"
 
 using namespace amrex;
 

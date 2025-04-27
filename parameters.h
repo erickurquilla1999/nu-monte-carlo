@@ -18,6 +18,8 @@ struct Parameters_struct
     int test_1_n_particles; // Number of particles to be created for test one
     amrex::Real time_step_s; // Time step in seconds
     int n_steps; // Number of steps to run
+    int write_grid; // Write grid every n steps
+    int write_particles; // Write particles every n steps
 };
 
 void get_parameters(Parameters_struct& params)
@@ -35,6 +37,8 @@ void get_parameters(Parameters_struct& params)
     pp.get("test_1_n_particles", params.test_1_n_particles); // Number of particles to be created for test one
     pp.get("time_step_s", params.time_step_s); // Time step in seconds
     pp.get("n_steps", params.n_steps); // Number of steps to run
+    pp.get("write_grid", params.write_grid); // Write grid every n steps
+    pp.get("write_particles", params.write_particles); // Write particles every n steps
 }
 
 void print_parameters(const Parameters_struct& params)
@@ -52,6 +56,8 @@ void print_parameters(const Parameters_struct& params)
     amrex::Print() << "  test_1_n_particles: " << params.test_1_n_particles << std::endl;
     amrex::Print() << "  time_step_s: " << params.time_step_s << std::endl;
     amrex::Print() << "  n_steps: " << params.n_steps << std::endl;
+    amrex::Print() << "  write_grid: " << params.write_grid << std::endl;
+    amrex::Print() << "  write_particles: " << params.write_particles << std::endl;
 }
 
 #endif

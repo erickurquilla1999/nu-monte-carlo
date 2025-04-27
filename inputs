@@ -15,4 +15,5 @@ test_1_n_particles = 10 # Number of particles to be created for test one
 n_steps = 500 # Number of steps to run
 time_step_s = 3.3333e-12  # Time step in seconds
 
-write_plotfile_interval = 1 # Interval for writing plotfiles
+write_grid = 50 # Write grid every n steps
+write_particles = 100 # Write particles every n steps

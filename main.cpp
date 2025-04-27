@@ -67,16 +67,20 @@ void evolve()
         particles.UpdateCellIndex();
         MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
 
+
         // Write the plotfile
         if (i_step % params.write_grid == 0) {
-            amrex::Print() << "Writing grid, step: " << i_step << "\n";
+            // amrex::Print() << "Writing grid, step: " << i_step << "\n";
             plotfile_name = "plt" + std::to_string(i_step);
             amrex::WriteSingleLevelPlotfile(plotfile_name, matter_mfab, {"rho_g_ccm", "ye", "T_MeV", "IMFP_cm", "chemical_potential_MeV"}, geom, time_phys_s, i_step);
             if (i_step % params.write_particles == 0) {
-                amrex::Print() << "Writing particles, step: " << i_step << "\n";
+                // amrex::Print() << "Writing particles, step: " << i_step << "\n";
+                // particles.Redistribute();
+                particles.LoopParticlesPrint();
                 particles.WritePlotFile(plotfile_name, "particles");
             }
         }
+
 
         // Update the time
         time_phys_s += params.time_step_s;

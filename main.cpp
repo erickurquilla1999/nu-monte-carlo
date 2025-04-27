@@ -63,9 +63,10 @@ void evolve()
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {
         amrex::Print() << "Step: " << i_step << "\n";
         particles.Redistribute();
-        particles.InsertParticles(params.test_1_n_particles, time_phys_s);
+        // particles.InsertParticles(params.test_1_n_particles, time_phys_s);
+        particles.EmissionParticles(matter_mfab, params.time_step_s);
         particles.UpdateCellIndex();
-        MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
+        // MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
 
 
         // Write the plotfile

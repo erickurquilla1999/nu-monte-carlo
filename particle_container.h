@@ -50,6 +50,8 @@ public:
 
     void UpdateCellIndex();
 
+    void EmissionParticles(const amrex::MultiFab& state, const amrex::Real dt);
+
 };
 
 #endif

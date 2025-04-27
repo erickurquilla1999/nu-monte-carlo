@@ -193,3 +193,179 @@ MCParticleContainer::UpdateCellIndex()
         });
     }
 }
+
+
+
+
+
+namespace
+{
+    AMREX_GPU_HOST_DEVICE void get_position_unit_cell(Real* r, const IntVect& nppc, int i_part)
+    {
+        int nx = nppc[0];
+        int ny = nppc[1];
+        int nz = nppc[2];
+
+        int ix_part = i_part/(ny * nz);
+        int iy_part = (i_part % (ny * nz)) % ny;
+        int iz_part = (i_part % (ny * nz)) / ny;
+
+        r[0] = (0.5+ix_part)/nx;
+        r[1] = (0.5+iy_part)/ny;
+        r[2] = (0.5+iz_part)/nz;
+    }
+
+    AMREX_GPU_HOST_DEVICE void symmetric_uniform(Real* Usymmetric, amrex::RandomEngine const& engine)
+    {
+        *Usymmetric = 2. * (amrex::Random(engine)-0.5);
+    }
+}
+
+
+
+
+
+void
+MCParticleContainer::
+EmissionParticles(const amrex::MultiFab& state, const amrex::Real dt)
+{
+
+    const int lev = 0;
+    const auto dx = Geom(lev).CellSizeArray();
+    const auto plo = Geom(lev).ProbLoArray();
+    const auto& a_bounds = Geom(lev).ProbDomain();
+
+
+    // determine the number of directions per location
+
+    const Real scale_fac = dx[0]*dx[1]*dx[2];
+    printf("scale_fac: %f\n", scale_fac);
+    printf("dx: %f %f %f\n", dx[0], dx[1], dx[2]);
+    printf("plo: %f %f %f\n", plo[0], plo[1], plo[2]);
+
+
+    for (MFIter mfi = MakeMFIter(lev); mfi.isValid(); ++mfi)
+    {
+        const Box& tile_box  = mfi.tilebox();
+
+        const auto lo = amrex::lbound(tile_box);
+        const auto hi = amrex::ubound(tile_box);
+
+        amrex::Print() << "hi.x: " << hi.x << ", hi.y: " << hi.y << ", hi.z: " << hi.z << "\n";
+        amrex::Print() << "lo.x: " << lo.x << ", lo.y: " << lo.y << ", lo.z: " << lo.z << "\n";
+
+        Gpu::ManagedVector<unsigned int> counts(tile_box.numPts(), 0);
+        unsigned int* pcount = counts.dataPtr();
+
+        Gpu::ManagedVector<unsigned int> offsets(tile_box.numPts());
+        unsigned int* poffset = offsets.dataPtr();
+
+        // Determine how many particles to add to the particle tile per cell
+        amrex::ParallelFor(tile_box,
+        [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
+        {
+            int ix = i - lo.x;
+            int iy = j - lo.y;
+            int iz = k - lo.z;
+            int nx = hi.x-lo.x+1;
+            int ny = hi.y-lo.y+1;
+            int nz = hi.z-lo.z+1;
+            unsigned int uix = amrex::min(nx-1,amrex::max(0,ix));
+            unsigned int uiy = amrex::min(ny-1,amrex::max(0,iy));
+            unsigned int uiz = amrex::min(nz-1,amrex::max(0,iz));
+            unsigned int cellid = (uix * ny + uiy) * nz + uiz;
+            pcount[cellid] += 1;
+        });
+
+        // Determine total number of particles to add to the particle tile
+        Gpu::inclusive_scan(counts.begin(), counts.end(), offsets.begin());
+
+        int num_to_add = offsets[tile_box.numPts()-1];
+        amrex::Print() << "Number of particles to add: " << num_to_add << "\n";
+        if (num_to_add == 0) continue;
+
+        // this will be the particle ID for the first new particle in the tile
+        long new_pid;
+        ParticleType* pstruct;
+
+        // #ifdef _OPENMP
+        // #pragma omp critical
+        // #endif
+        // {
+            auto& particles = GetParticles(lev);
+            auto& particle_tile = particles[std::make_pair(mfi.index(), mfi.LocalTileIndex())];
+
+            // Resize the particle container
+            auto old_size = particle_tile.GetArrayOfStructs().size();
+            printf("old_size: %lu\n", old_size);
+            auto new_size = old_size + num_to_add;
+            printf("new_size: %lu\n", new_size);
+
+            particle_tile.resize(new_size);
+
+            // get the next particle ID
+            new_pid = ParticleType::NextID();
+
+            // set the starting particle ID for the next tile of particles
+            ParticleType::NextID(new_pid + num_to_add);
+
+            pstruct = particle_tile.GetArrayOfStructs()().data();
+        // }
+
+        int procID = ParallelDescriptor::MyProc();
+
+        //===============================================//
+        // Initialize particle data in the particle tile //
+        //===============================================//
+        amrex::ParallelForRNG(tile_box,
+        [=] AMREX_GPU_DEVICE (int i, int j, int k, amrex::RandomEngine const& engine) noexcept
+        {
+            int ix = i - lo.x;
+            int iy = j - lo.y;
+            int iz = k - lo.z;
+            int nx = hi.x-lo.x+1;
+            int ny = hi.y-lo.y+1;
+            int nz = hi.z-lo.z+1;
+            unsigned int uix = amrex::min(nx-1,amrex::max(0,ix));
+            unsigned int uiy = amrex::min(ny-1,amrex::max(0,iy));
+            unsigned int uiz = amrex::min(nz-1,amrex::max(0,iz));
+            unsigned int cellid = (uix * ny + uiy) * nz + uiz;
+
+            Real x_cell = plo[0] + (i + 0.5)*dx[0];
+            Real y_cell = plo[1] + (j + 0.5)*dx[1];
+            Real z_cell = plo[2] + (k + 0.5)*dx[2];
+
+            printf("pcount[%u]: %u\n", cellid, pcount[cellid]);
+
+            for (int newparthiscell=0; newparthiscell<pcount[cellid];newparthiscell++) {
+                // Get the Particle data corresponding to our particle index in pidx
+                const int pidx = poffset[cellid] - poffset[0] + old_size + newparthiscell;
+                printf("pidx: %d\n", pidx);
+
+                ParticleType& p = pstruct[pidx];
+
+                // Set particle ID using the ID for the first of the new particles in this tile
+                // plus our zero-based particle index
+                p.id()   = new_pid + pidx;
+                printf("p.id(): %d\n", static_cast<int>(p.id()));
+
+                // Set CPU ID
+                p.cpu()  = procID;
+
+                // Set particle position
+                p.pos(0) = x_cell;
+                p.pos(1) = y_cell;
+                p.pos(2) = z_cell;
+
+
+                p.rdata(RealData::x) = x_cell;
+                p.rdata(RealData::y) = y_cell;
+                p.rdata(RealData::z) = z_cell;
+            }
+
+        }); // loop over grid cells
+
+
+    } // loop over multifabs
+
+} // InitParticles()

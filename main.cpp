@@ -79,7 +79,7 @@ void evolve()
         amrex::Print() << "Step: " << i_step << "\n";
         particles.Redistribute();
         // particles.InsertParticles(params.test_1_n_particles, time_phys_s);
-        particles.EmissionParticles(matter_mfab, n_nu_per_mc_particles, params.nu_Energy_center_MeV, dtdE3_3dOmegadx3);
+        particles.EmissionParticles(matter_mfab, n_nu_per_mc_particles, params.nu_Energy_center_MeV, dtdE3_3dOmegadx3, time_phys_s);
         particles.UpdateCellIndex();
         MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
 

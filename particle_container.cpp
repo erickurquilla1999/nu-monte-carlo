@@ -214,7 +214,7 @@ namespace
 
 void
 MCParticleContainer::
-EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, const amrex::Real nu_Energy_MeV,  const amrex::Real dtdE3_3dOmegadx3)
+EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, const amrex::Real nu_Energy_MeV,  const amrex::Real dtdE3_3dOmegadx3, const amrex::Real curr_time_s)
 {
 
     const int lev = 0;
@@ -343,6 +343,9 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
                 // Set CPU ID
                 p.cpu()  = procID;
 
+                // set particle time
+                p.rdata(RealData::time_s) = curr_time_s;
+
                 // Set particle position
                 Real rand;
 
@@ -357,7 +360,6 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
                 symmetric_uniform(&rand, engine);
                 p.pos(2)             = plo[2] + (k + 0.5*rand)*dx[2];
                 p.rdata(RealData::z) = plo[2] + (k + 0.5*rand)*dx[2];
-                
             }
 
         }); // loop over grid cells

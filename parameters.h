@@ -20,6 +20,7 @@ struct Parameters_struct
     int n_steps; // Number of steps to run
     int write_grid; // Write grid every n steps
     int write_particles; // Write particles every n steps
+    int n_mc_particles; // Number of Monte Carlo particles
 };
 
 void get_parameters(Parameters_struct& params)
@@ -39,6 +40,7 @@ void get_parameters(Parameters_struct& params)
     pp.get("n_steps", params.n_steps); // Number of steps to run
     pp.get("write_grid", params.write_grid); // Write grid every n steps
     pp.get("write_particles", params.write_particles); // Write particles every n steps
+    pp.get("n_mc_particles", params.n_mc_particles); // Number of Monte Carlo particles
 }
 
 void print_parameters(const Parameters_struct& params)
@@ -58,6 +60,7 @@ void print_parameters(const Parameters_struct& params)
     amrex::Print() << "  n_steps: " << params.n_steps << std::endl;
     amrex::Print() << "  write_grid: " << params.write_grid << std::endl;
     amrex::Print() << "  write_particles: " << params.write_particles << std::endl;
+    amrex::Print() << "  n_mc_particles: " << params.n_mc_particles << std::endl;
 }
 
 #endif

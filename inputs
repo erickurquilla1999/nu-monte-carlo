@@ -17,3 +17,5 @@ time_step_s = 3.33564095198152e-11  # Time step in seconds
 
 write_grid = 1 # Write grid every n steps
 write_particles = 1 # Write particles every n steps
+
+n_mc_particles = 10 # Number of Monte Carlo particles

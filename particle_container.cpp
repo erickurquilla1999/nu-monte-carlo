@@ -200,21 +200,6 @@ MCParticleContainer::UpdateCellIndex()
 
 namespace
 {
-    AMREX_GPU_HOST_DEVICE void get_position_unit_cell(Real* r, const IntVect& nppc, int i_part)
-    {
-        int nx = nppc[0];
-        int ny = nppc[1];
-        int nz = nppc[2];
-
-        int ix_part = i_part/(ny * nz);
-        int iy_part = (i_part % (ny * nz)) % ny;
-        int iz_part = (i_part % (ny * nz)) / ny;
-
-        r[0] = (0.5+ix_part)/nx;
-        r[1] = (0.5+iy_part)/ny;
-        r[2] = (0.5+iz_part)/nz;
-    }
-
     AMREX_GPU_HOST_DEVICE void symmetric_uniform(Real* Usymmetric, amrex::RandomEngine const& engine)
     {
         *Usymmetric = 2. * (amrex::Random(engine)-0.5);

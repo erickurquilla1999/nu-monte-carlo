@@ -325,13 +325,10 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
             unsigned int uiz = amrex::min(nz-1,amrex::max(0,iz));
             unsigned int cellid = (uix * ny + uiy) * nz + uiz;
 
-            Real x_cell = plo[0] + (i + 0.5)*dx[0];
-            Real y_cell = plo[1] + (j + 0.5)*dx[1];
-            Real z_cell = plo[2] + (k + 0.5)*dx[2];
-
             printf("pcount[%u]: %u\n", cellid, pcount[cellid]);
 
             for (int newparthiscell=0; newparthiscell<pcount[cellid];newparthiscell++) {
+
                 // Get the Particle data corresponding to our particle index in pidx
                 const int pidx = poffset[cellid] - poffset[0] + old_size + newparthiscell;
                 printf("pidx: %d\n", pidx);
@@ -347,14 +344,20 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
                 p.cpu()  = procID;
 
                 // Set particle position
-                p.pos(0) = x_cell;
-                p.pos(1) = y_cell;
-                p.pos(2) = z_cell;
+                Real rand;
 
+                symmetric_uniform(&rand, engine);
+                p.pos(0)             = plo[0] + (i + 0.5*rand)*dx[0];
+                p.rdata(RealData::x) = plo[0] + (i + 0.5*rand)*dx[0];
 
-                p.rdata(RealData::x) = x_cell;
-                p.rdata(RealData::y) = y_cell;
-                p.rdata(RealData::z) = z_cell;
+                symmetric_uniform(&rand, engine);
+                p.pos(1)             = plo[1] + (j + 0.5*rand)*dx[1];
+                p.rdata(RealData::y) = plo[1] + (j + 0.5*rand)*dx[1];
+
+                symmetric_uniform(&rand, engine);
+                p.pos(2)             = plo[2] + (k + 0.5*rand)*dx[2];
+                p.rdata(RealData::z) = plo[2] + (k + 0.5*rand)*dx[2];
+                
             }
 
         }); // loop over grid cells

@@ -377,6 +377,13 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
                 // Set particle energy
                 p.rdata(RealData::E_MeV) = nu_Energy_MeV;
 
+                // Set number of physical particles in MC particle
+                p.rdata(RealData::N) = n_nu_packet;
+
+                // Set particle optical depth
+                p.rdata(RealData::tau) = 0.0;
+                symmetric_uniform(&rand, engine);
+                p.rdata(RealData::tau_limit) = -std::log(((rand+1.0)*0.5));
             }
 
         }); // loop over grid cells

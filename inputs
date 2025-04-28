@@ -19,3 +19,7 @@ write_grid = 1 # Write grid every n steps
 write_particles = 1 # Write particles every n steps
 
 n_mc_particles = 10 # Number of Monte Carlo particles
+
+nu_Energy_top_MeV    = 2.0  # Width of the neutrino energy distribution in MeV
+nu_Energy_center_MeV = 1.0  # Energy of the neutrino in MeV
+nu_Energy_bottom_MeV = 0.0  # Width of the neutrino energy distribution in MeV

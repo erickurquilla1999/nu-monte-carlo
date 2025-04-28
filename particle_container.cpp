@@ -5,6 +5,8 @@
 #include <AMReX_MultiFab.H>
 
 #include "particle_container.h"
+#include "constant.h"
+#include "matter.h"
 
 using namespace amrex;
 
@@ -212,7 +214,7 @@ namespace
 
 void
 MCParticleContainer::
-EmissionParticles(const amrex::MultiFab& state, const amrex::Real dt)
+EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, const amrex::Real nu_Energy_MeV,  const amrex::Real dtdE3_3dOmegadx3)
 {
 
     const int lev = 0;
@@ -245,10 +247,17 @@ EmissionParticles(const amrex::MultiFab& state, const amrex::Real dt)
         Gpu::ManagedVector<unsigned int> offsets(tile_box.numPts());
         unsigned int* poffset = offsets.dataPtr();
 
+        auto const& matter_multifab = matter.array(mfi);
+
         // Determine how many particles to add to the particle tile per cell
         amrex::ParallelFor(tile_box,
         [=] AMREX_GPU_DEVICE (int i, int j, int k) noexcept
         {
+
+            amrex::Real feq = 1.0 / ( 1.0 + exp( ( nu_Energy_MeV - matter_multifab(i,j,k,MatterData::chemical_potential_MeV) ) / matter_multifab(i,j,k,MatterData::T_MeV) ) );
+            amrex::Real deltaN = ( 1.0 / ( PhysConst::c2 * PhysConst::hbar * PhysConst::hbar * PhysConst::hbar ) ) * dtdE3_3dOmegadx3 * matter_multifab(i,j,k,MatterData::IMFP_cm) * feq;
+            int num_to_add = static_cast<int>( deltaN / n_nu_packet );
+
             int ix = i - lo.x;
             int iy = j - lo.y;
             int iz = k - lo.z;
@@ -259,7 +268,7 @@ EmissionParticles(const amrex::MultiFab& state, const amrex::Real dt)
             unsigned int uiy = amrex::min(ny-1,amrex::max(0,iy));
             unsigned int uiz = amrex::min(nz-1,amrex::max(0,iz));
             unsigned int cellid = (uix * ny + uiy) * nz + uiz;
-            pcount[cellid] += 1;
+            pcount[cellid] += num_to_add;
         });
 
         // Determine total number of particles to add to the particle tile

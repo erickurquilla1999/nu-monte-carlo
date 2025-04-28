@@ -327,7 +327,8 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
 
             printf("pcount[%u]: %u\n", cellid, pcount[cellid]);
 
-            for (int newparthiscell=0; newparthiscell<pcount[cellid];newparthiscell++) {
+            for (int newparthiscell=0; newparthiscell<pcount[cellid];newparthiscell++)
+            {
 
                 // Get the Particle data corresponding to our particle index in pidx
                 const int pidx = poffset[cellid] - poffset[0] + old_size + newparthiscell;
@@ -360,6 +361,22 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
                 symmetric_uniform(&rand, engine);
                 p.pos(2)             = plo[2] + (k + 0.5*rand)*dx[2];
                 p.rdata(RealData::z) = plo[2] + (k + 0.5*rand)*dx[2];
+
+                // Set particle momentum
+
+                symmetric_uniform(&rand, engine);
+                amrex::Real phi = ((rand+1.0)*0.5)*2.0*MathConst::pi;
+                symmetric_uniform(&rand, engine);
+                amrex::Real cos_theta = rand;
+                amrex::Real sin_theta = sqrt(1 - cos_theta*cos_theta);
+
+                p.rdata(RealData::phatx) = sin_theta * cos(phi);
+                p.rdata(RealData::phaty) = sin_theta * sin(phi);
+                p.rdata(RealData::phatz) = cos_theta;
+
+                // Set particle energy
+                p.rdata(RealData::E_MeV) = nu_Energy_MeV;
+
             }
 
         }); // loop over grid cells

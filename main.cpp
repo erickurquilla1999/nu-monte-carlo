@@ -8,6 +8,7 @@
 #include "particle_container.h"
 #include "matter.h"
 #include "particle_interactions.h"
+#include "constant.h"
 
 using namespace amrex;
 
@@ -50,6 +51,12 @@ void evolve()
 
     amrex::Geometry geom(domain_box, &real_box);
 
+    const amrex::Real* dx = geom.CellSize();
+    const amrex::Real* plo = geom.ProbLo();
+    amrex::Real dx_local[3] = {dx[0], dx[1], dx[2]};
+    amrex::Real plo_local[3] = {plo[0], plo[1], plo[2]};
+    amrex::Real cellvolume = dx[0] * dx[1] * dx[2];
+
     // Initialize the bakground matter conditions
     init_matter(matter_mfab);
 
@@ -58,6 +65,11 @@ void evolve()
 
     amrex::Real time_phys_s = 0.0; // speed of light in cm/s
     std::string plotfile_name;
+
+    amrex::Real dtdE3_3dOmegadx3 = ( params.time_step_s ) * //dt
+                                ( (params.nu_Energy_top_MeV*params.nu_Energy_top_MeV*params.nu_Energy_top_MeV - params.nu_Energy_bottom_MeV*params.nu_Energy_bottom_MeV*params.nu_Energy_bottom_MeV)/3.0 ) * //dE3
+                                ( 4.0 * MathConst::pi ) * // dOmega
+                                ( cellvolume ); // dx3
 
     // Loop over the number of steps
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {

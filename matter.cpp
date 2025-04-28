@@ -1,6 +1,7 @@
 #include <AMReX_MultiFab.H>
 
 #include "matter.h"
+#include "constant.h"
 
 void 
 init_matter(amrex::MultiFab& matter)
@@ -38,21 +39,23 @@ compute_nu_per_MC_particles(amrex::MultiFab& matter, int n_mc_particles, int& n_
         [=] AMREX_GPU_DEVICE (int i, int j, int k) -> ReduceTuple
         {
 
-            amrex::Real feq = 1.0 / ( 1.0 + exp( ( nu_Energy_MeV - matter_multifab(i,j,k,MatterData::chemical_potential_MeV) ) / matter_multifab(i,j,k,MatterData::T_MeV) ) );
+            amrex::Real kfeq = matter_multifab(i,j,k,MatterData::IMFP_cm) * 1.0 / ( 1.0 + exp( ( nu_Energy_MeV - matter_multifab(i,j,k,MatterData::chemical_potential_MeV) ) / matter_multifab(i,j,k,MatterData::T_MeV) ) );
 
-            return {feq, matter_multifab(i,j,k,MatterData::IMFP_cm), matter_multifab(i,j,k,MatterData::IMFP_cm)};
+            return {kfeq, matter_multifab(i,j,k,MatterData::IMFP_cm), matter_multifab(i,j,k,MatterData::IMFP_cm)};
         });
     }
 
     // extract the reduced values from the combined reduced data structure
     auto rv = reduce_data.value();
-    amrex::Real sumfeq = amrex::get<0>(rv);
+    amrex::Real sumkfeq = amrex::get<0>(rv);
     amrex::Real minIMFPcm   = amrex::get<1>(rv);
     amrex::Real maxIMFPcm   = amrex::get<2>(rv);
 
     // reduce across MPI ranks
-    amrex::ParallelDescriptor::ReduceRealMin(sumfeq);
+    amrex::ParallelDescriptor::ReduceRealMin(sumkfeq);
     amrex::ParallelDescriptor::ReduceRealMin(minIMFPcm);
     amrex::ParallelDescriptor::ReduceRealMin(maxIMFPcm);
+
+    amrex::Real w = ( 1.0 / (PhysConst::c2 * PhysConst::hbar * PhysConst::hbar * PhysConst::hbar ) );
 
 }

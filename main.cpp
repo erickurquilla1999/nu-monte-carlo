@@ -66,10 +66,13 @@ void evolve()
     amrex::Real time_phys_s = 0.0; // speed of light in cm/s
     std::string plotfile_name;
 
-    amrex::Real dtdE3_3dOmegadx3 = ( params.time_step_s ) * //dt
+    const amrex::Real dtdE3_3dOmegadx3 = ( params.time_step_s ) * //dt
                                 ( (params.nu_Energy_top_MeV*params.nu_Energy_top_MeV*params.nu_Energy_top_MeV - params.nu_Energy_bottom_MeV*params.nu_Energy_bottom_MeV*params.nu_Energy_bottom_MeV)/3.0 ) * //dE3
                                 ( 4.0 * MathConst::pi ) * // dOmega
                                 ( cellvolume ); // dx3
+
+    int n_nu_per_mc_particles = 0.0;
+    compute_nu_per_MC_particles(matter_mfab, params.n_mc_particles, n_nu_per_mc_particles, params.nu_Energy_center_MeV, dtdE3_3dOmegadx3);
 
     // Loop over the number of steps
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {

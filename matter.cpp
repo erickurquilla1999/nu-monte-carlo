@@ -23,7 +23,7 @@ init_matter(amrex::MultiFab& matter)
 }
 
 void
-compute_nu_per_MC_particles(amrex::MultiFab& matter, int n_mc_particles, int& n_nu_per_mc_particles, const amrex::Real nu_Energy_MeV)
+compute_nu_per_MC_particles(amrex::MultiFab& matter,const int n_mc_particles, int& n_nu_per_mc_particles, const amrex::Real nu_Energy_MeV,  const amrex::Real dtdE3_3dOmegadx3)
 {
 
     amrex::ReduceOps< amrex::ReduceOpSum, amrex::ReduceOpMin, amrex::ReduceOpMax > reduce_op;
@@ -56,6 +56,5 @@ compute_nu_per_MC_particles(amrex::MultiFab& matter, int n_mc_particles, int& n_
     amrex::ParallelDescriptor::ReduceRealMin(minIMFPcm);
     amrex::ParallelDescriptor::ReduceRealMin(maxIMFPcm);
 
-    amrex::Real w = ( 1.0 / (PhysConst::c2 * PhysConst::hbar * PhysConst::hbar * PhysConst::hbar ) );
-
+    n_nu_per_mc_particles = static_cast<int>( ( 1.0 / (PhysConst::c2 * PhysConst::hbar * PhysConst::hbar * PhysConst::hbar ) ) * ( 1.0 / n_mc_particles ) * dtdE3_3dOmegadx3 * sumkfeq );
 }

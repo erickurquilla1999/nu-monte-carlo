@@ -1,8 +1,6 @@
 #ifndef MATTER_H
 #define MATTER_H
 
-#include <AMReX_MultiFab.H>
-
 struct MatterData
 {
     enum {
@@ -16,5 +14,7 @@ struct MatterData
 };
 
 void init_matter(amrex::MultiFab& matter);
+
+void compute_nu_per_MC_particles(amrex::MultiFab& matter, int n_mc_particles, int& n_nu_per_mc_particles, const amrex::Real nu_Energy_MeV);
 
 #endif

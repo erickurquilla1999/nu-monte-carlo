@@ -90,11 +90,11 @@ void evolve()
 
         // Write the plotfile
         if (i_step % params.write_grid == 0) {
-            // amrex::Print() << "Writing grid, step: " << i_step << "\n";
+            amrex::Print() << "Writing grid, step: " << i_step << "\n";
             plotfile_name = "plt" + std::to_string(i_step);
             amrex::WriteSingleLevelPlotfile(plotfile_name, nu_mfab, {"n_invcm3", "fx_invcm3", "fy_invcm3", "fz_invcm3"}, geom, time_phys_s, i_step);
             if (i_step % params.write_particles == 0) {
-                // amrex::Print() << "Writing particles, step: " << i_step << "\n";
+                amrex::Print() << "Writing particles, step: " << i_step << "\n";
                 particles.WritePlotFile(plotfile_name, "particles");
             }
         }

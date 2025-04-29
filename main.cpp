@@ -91,7 +91,7 @@ void evolve()
             amrex::WriteSingleLevelPlotfile(plotfile_name, matter_mfab, {"rho_g_ccm", "ye", "T_MeV", "IMFP_cm", "chemical_potential_MeV"}, geom, time_phys_s, i_step);
             if (i_step % params.write_particles == 0) {
                 // amrex::Print() << "Writing particles, step: " << i_step << "\n";
-                particles.LoopParticlesPrint();
+                // particles.LoopParticlesPrint();
                 particles.WritePlotFile(plotfile_name, "particles");
             }
         }

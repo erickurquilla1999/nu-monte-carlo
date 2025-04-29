@@ -11,7 +11,7 @@ init_matter(amrex::MultiFab& matter)
         const amrex::Array4<amrex::Real>& mf_array = matter.array(mfi);
         amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) {
 
-            if (i == 0 && j == 0 && k == 0) {
+            if (i == 0 ) {
                 mf_array(i,j,k,MatterData::IMFP_cm) = 1.0/5.0; // 1/cm
                 mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
                 mf_array(i,j,k,MatterData::T_MeV) = 1.0; // MeV

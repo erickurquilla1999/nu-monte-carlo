@@ -45,6 +45,7 @@ void evolve()
     #endif
 
     amrex::MultiFab matter_mfab(domain_box_array, distribution_mapping, MatterData::ncomps, 0);
+    amrex::MultiFab nu_mfab(domain_box_array, distribution_mapping, NeutrinoData::ncomps, 0);
 
     amrex::RealBox real_box({AMREX_D_DECL(0.0, 0.0, 0.0)},
                             {AMREX_D_DECL(params.input_physical_domain_size_x_cm, params.input_physical_domain_size_y_cm, params.input_physical_domain_size_z_cm)});

@@ -63,27 +63,4 @@ void compute_nu_n_and_f(MCParticleContainer& particles, const amrex::Geometry& g
         amrex::Gpu::Atomic::AddNoRet(&sarr(i_indx,j_indx,k_indx,NeutrinoData::fy_invcm3), p.rdata(RealData::N)*p.rdata(RealData::phaty)*inv_cell_volume);
         amrex::Gpu::Atomic::AddNoRet(&sarr(i_indx,j_indx,k_indx,NeutrinoData::fz_invcm3), p.rdata(RealData::N)*p.rdata(RealData::phatz)*inv_cell_volume);
     });
-
-    for (amrex::MFIter mfi(nu_n_and_f); mfi.isValid(); ++mfi) {
-        const amrex::Box& bx = mfi.validbox();
-        const amrex::Array4<amrex::Real>& mf_array = nu_n_and_f.array(mfi);
-        amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) {
-
-            // mf_array(i,j,k,NeutrinoData::n_invcm3) = i + j + k;
-            // mf_array(i,j,k,NeutrinoData::fx_invcm3) = i + j + k;
-            // mf_array(i,j,k,NeutrinoData::fy_invcm3) = i + j + k;
-            // mf_array(i,j,k,NeutrinoData::fz_invcm3) = i + j + k;
-
-            mf_array(i,j,k,NeutrinoData::n_invcm3) = std::log(mf_array(i,j,k,NeutrinoData::n_invcm3));
-            mf_array(i,j,k,NeutrinoData::fx_invcm3) = std::log(mf_array(i,j,k,NeutrinoData::fx_invcm3));
-            mf_array(i,j,k,NeutrinoData::fy_invcm3) = std::log(mf_array(i,j,k,NeutrinoData::fy_invcm3));
-            mf_array(i,j,k,NeutrinoData::fz_invcm3) = std::log(mf_array(i,j,k,NeutrinoData::fz_invcm3));
-
-            printf("n_invcm3[%d][%d][%d] = %e\n", i, j, k, mf_array(i,j,k,NeutrinoData::n_invcm3));
-            printf("fx_invcm3[%d][%d][%d] = %e\n", i, j, k, mf_array(i,j,k,NeutrinoData::fx_invcm3));
-            printf("fy_invcm3[%d][%d][%d] = %e\n", i, j, k, mf_array(i,j,k,NeutrinoData::fy_invcm3));
-            printf("fz_invcm3[%d][%d][%d] = %e\n", i, j, k, mf_array(i,j,k,NeutrinoData::fz_invcm3));
-        });
-    }
-
 }

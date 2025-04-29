@@ -65,20 +65,10 @@ void
 MCParticleContainer::
 EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, const amrex::Real nu_Energy_MeV,  const amrex::Real dtdE3_3dOmegadx3, const amrex::Real curr_time_s)
 {
-
     const int lev = 0;
     const auto dx = Geom(lev).CellSizeArray();
     const auto plo = Geom(lev).ProbLoArray();
     const auto& a_bounds = Geom(lev).ProbDomain();
-
-
-    // determine the number of directions per location
-
-    const Real scale_fac = dx[0]*dx[1]*dx[2];
-    printf("scale_fac: %f\n", scale_fac);
-    printf("dx: %f %f %f\n", dx[0], dx[1], dx[2]);
-    printf("plo: %f %f %f\n", plo[0], plo[1], plo[2]);
-
 
     for (MFIter mfi = MakeMFIter(lev); mfi.isValid(); ++mfi)
     {
@@ -86,9 +76,6 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
 
         const auto lo = amrex::lbound(tile_box);
         const auto hi = amrex::ubound(tile_box);
-
-        amrex::Print() << "hi.x: " << hi.x << ", hi.y: " << hi.y << ", hi.z: " << hi.z << "\n";
-        amrex::Print() << "lo.x: " << lo.x << ", lo.y: " << lo.y << ", lo.z: " << lo.z << "\n";
 
         Gpu::ManagedVector<unsigned int> counts(tile_box.numPts(), 0);
         unsigned int* pcount = counts.dataPtr();
@@ -174,21 +161,17 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
             unsigned int uiz = amrex::min(nz-1,amrex::max(0,iz));
             unsigned int cellid = (uix * ny + uiy) * nz + uiz;
 
-            printf("pcount[%u]: %u\n", cellid, pcount[cellid]);
-
             for (int newparthiscell=0; newparthiscell<pcount[cellid];newparthiscell++)
             {
 
                 // Get the Particle data corresponding to our particle index in pidx
                 const int pidx = poffset[cellid] - poffset[0] + old_size + newparthiscell;
-                printf("pidx: %d\n", pidx);
 
                 ParticleType& p = pstruct[pidx];
 
                 // Set particle ID using the ID for the first of the new particles in this tile
                 // plus our zero-based particle index
                 p.id()   = new_pid + pidx;
-                printf("p.id(): %d\n", static_cast<int>(p.id()));
 
                 // Set CPU ID
                 p.cpu()  = procID;

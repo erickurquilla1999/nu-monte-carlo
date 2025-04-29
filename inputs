@@ -10,8 +10,6 @@ input_physical_domain_size_x_cm = 10.0  # Physical domain size in the x-directio
 input_physical_domain_size_y_cm = 10.0  # Physical domain size in the y-direction
 input_physical_domain_size_z_cm = 10.0  # Physical domain size in the z-direction
 
-test_1_n_particles = 1000 # Number of particles to be created for test one
-
 n_steps = 300 # Number of steps to run
 time_step_s = 3.33564095198152e-11  # Time step in seconds
 

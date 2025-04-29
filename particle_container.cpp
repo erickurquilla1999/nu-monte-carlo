@@ -84,7 +84,7 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
 
             amrex::Real feq = 1.0 / ( 1.0 + exp( ( nu_Energy_MeV - matter_multifab(i,j,k,MatterData::chemical_potential_MeV) ) / matter_multifab(i,j,k,MatterData::T_MeV) ) );
             amrex::Real deltaN = ( 1.0 / ( PhysConst::c2 * PhysConst::hbar * PhysConst::hbar * PhysConst::hbar ) ) * dtdE3_3dOmegadx3 * matter_multifab(i,j,k,MatterData::IMFP_cm) * feq;
-            int num_to_add = static_cast<int>( deltaN / n_nu_packet );
+            int num_to_add_this_cell = amrex::Math::ceil(deltaN / n_nu_packet);
 
             int ix = i - lo.x;
             int iy = j - lo.y;
@@ -96,7 +96,8 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
             unsigned int uiy = amrex::min(ny-1,amrex::max(0,iy));
             unsigned int uiz = amrex::min(nz-1,amrex::max(0,iz));
             unsigned int cellid = (uix * ny + uiy) * nz + uiz;
-            pcount[cellid] += num_to_add;
+
+            pcount[cellid] += num_to_add_this_cell;
         });
 
         // Determine total number of particles to add to the particle tile

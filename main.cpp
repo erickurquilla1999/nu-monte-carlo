@@ -77,19 +77,23 @@ void evolve()
     amrex::Print() << "Number of neutrinos per MC particle: " << n_nu_per_mc_particles << "\n";
     amrex::Print() << "dtdE3_3dOmegadx3: " << dtdE3_3dOmegadx3 << "\n";
 
+    // Write matter plotfile
+    amrex::WriteSingleLevelPlotfile("pltmatter", matter_mfab, {"rho_g_ccm", "ye", "T_MeV", "IMFP_cm", "chemical_potential_MeV"}, geom, 0.0, 0);
+
     // Loop over the number of steps
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {
         amrex::Print() << "Step: " << i_step << "\n";
         particles.Redistribute();
         // particles.InsertParticles(params.test_1_n_particles, time_phys_s);
         particles.EmissionParticles(matter_mfab, n_nu_per_mc_particles, params.nu_Energy_center_MeV, dtdE3_3dOmegadx3, time_phys_s);
+        compute_nu_n_and_f(particles, geom, nu_mfab);
 
 
         // Write the plotfile
         if (i_step % params.write_grid == 0) {
             // amrex::Print() << "Writing grid, step: " << i_step << "\n";
             plotfile_name = "plt" + std::to_string(i_step);
-            amrex::WriteSingleLevelPlotfile(plotfile_name, matter_mfab, {"rho_g_ccm", "ye", "T_MeV", "IMFP_cm", "chemical_potential_MeV"}, geom, time_phys_s, i_step);
+            amrex::WriteSingleLevelPlotfile(plotfile_name, nu_mfab, {"n_invcm3", "fx_invcm3", "fy_invcm3", "fz_invcm3"}, geom, time_phys_s, i_step);
             if (i_step % params.write_particles == 0) {
                 // amrex::Print() << "Writing particles, step: " << i_step << "\n";
                 // particles.LoopParticlesPrint();

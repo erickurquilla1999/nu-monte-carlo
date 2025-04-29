@@ -351,16 +351,16 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
                 Real rand;
 
                 symmetric_uniform(&rand, engine);
-                p.pos(0)             = plo[0] + (i + 0.5*rand)*dx[0];
-                p.rdata(RealData::x) = plo[0] + (i + 0.5*rand)*dx[0];
+                p.pos(0)             = plo[0] + (i + 0.5*(rand+1.0))*dx[0];
+                p.rdata(RealData::x) = plo[0] + (i + 0.5*(rand+1.0))*dx[0];
 
                 symmetric_uniform(&rand, engine);
-                p.pos(1)             = plo[1] + (j + 0.5*rand)*dx[1];
-                p.rdata(RealData::y) = plo[1] + (j + 0.5*rand)*dx[1];
+                p.pos(1)             = plo[1] + (j + 0.5*(rand+1.0))*dx[1];
+                p.rdata(RealData::y) = plo[1] + (j + 0.5*(rand+1.0))*dx[1];
 
                 symmetric_uniform(&rand, engine);
-                p.pos(2)             = plo[2] + (k + 0.5*rand)*dx[2];
-                p.rdata(RealData::z) = plo[2] + (k + 0.5*rand)*dx[2];
+                p.pos(2)             = plo[2] + (k + 0.5*(rand+1.0))*dx[2];
+                p.rdata(RealData::z) = plo[2] + (k + 0.5*(rand+1.0))*dx[2];
 
                 // Set particle momentum
 

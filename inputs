@@ -1,3 +1,5 @@
+simulation_type = 0 # Simulation type. 0 = 1D emmision test, 1 for random momentum emission
+
 input_n_cell_x = 10  # Number of cells in the x-direction
 input_n_cell_y = 10  # Number of cells in the y-direction
 input_n_cell_z = 10  # Number of cells in the z-direction

@@ -23,6 +23,7 @@ struct Parameters_struct
     amrex::Real nu_Energy_center_MeV; // Energy of the neutrino in MeV
     amrex::Real nu_Energy_bottom_MeV; // Width of the neutrino energy distribution in MeV
     amrex::Real nu_Energy_top_MeV; // Width of the neutrino energy distribution in MeV
+    int simulation_type; // Simulation type. 0 = 1D emmision test, 1 for random momentum emission
 };
 
 void get_parameters(Parameters_struct& params)
@@ -45,6 +46,7 @@ void get_parameters(Parameters_struct& params)
     pp.get("nu_Energy_center_MeV", params.nu_Energy_center_MeV); // Energy of the neutrino in MeV
     pp.get("nu_Energy_bottom_MeV", params.nu_Energy_bottom_MeV); // Width of the neutrino energy distribution in MeV
     pp.get("nu_Energy_top_MeV", params.nu_Energy_top_MeV); // Width of the neutrino energy distribution in MeV
+    pp.get("simulation_type", params.simulation_type); // Simulation type. 0 = 1D emmision test, 1 for random momentum emission
 }
 
 void print_parameters(const Parameters_struct& params)
@@ -67,6 +69,7 @@ void print_parameters(const Parameters_struct& params)
     amrex::Print() << "  nu_Energy_center_MeV: " << params.nu_Energy_center_MeV << std::endl;
     amrex::Print() << "  nu_Energy_bottom_MeV: " << params.nu_Energy_bottom_MeV << std::endl;
     amrex::Print() << "  nu_Energy_top_MeV: " << params.nu_Energy_top_MeV << std::endl;
+    amrex::Print() << "  simulation_type: " << params.simulation_type << std::endl;
 }
 
 #endif

@@ -71,8 +71,10 @@ void evolve()
                                 ( 4.0 * MathConst::pi ) * // dOmega
                                 ( cellvolume ); // dx3
 
-    int n_nu_per_mc_particles = 0.0;
+    amrex::Real n_nu_per_mc_particles = 0.0;
     compute_nu_per_MC_particles(matter_mfab, params.n_mc_particles, n_nu_per_mc_particles, params.nu_Energy_center_MeV, dtdE3_3dOmegadx3);
+    amrex::Print() << "Number of neutrinos per MC particle: " << n_nu_per_mc_particles << "\n";
+    amrex::Print() << "dtdE3_3dOmegadx3: " << dtdE3_3dOmegadx3 << "\n";
 
     // Loop over the number of steps
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {

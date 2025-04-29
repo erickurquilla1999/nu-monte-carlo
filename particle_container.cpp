@@ -63,7 +63,7 @@ namespace
 
 void
 MCParticleContainer::
-EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, const amrex::Real nu_Energy_MeV,  const amrex::Real dtdE3_3dOmegadx3, const amrex::Real curr_time_s)
+EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, const amrex::Real nu_Energy_MeV,  const amrex::Real dtdE3_3dOmegadx3, const amrex::Real curr_time_s, const int simtype)
 {
     const int lev = 0;
     const auto dx = Geom(lev).CellSizeArray();
@@ -195,21 +195,23 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
                 p.rdata(RealData::z) = plo[2] + (k + 0.5*(rand+1.0))*dx[2];
 
                 // Set particle momentum
-
-                symmetric_uniform(&rand, engine);
-                amrex::Real phi = ((rand+1.0)*0.5)*2.0*MathConst::pi;
-                symmetric_uniform(&rand, engine);
-                amrex::Real cos_theta = rand;
-                amrex::Real sin_theta = sqrt(1 - cos_theta*cos_theta);
-
-                p.rdata(RealData::phatx) = sin_theta * cos(phi);
-                p.rdata(RealData::phaty) = sin_theta * sin(phi);
-                p.rdata(RealData::phatz) = cos_theta;
-
-                // Test values
-                // p.rdata(RealData::phatx) = 1.0;
-                // p.rdata(RealData::phaty) = 0.0;
-                // p.rdata(RealData::phatz) = 0.0;
+                if (simtype == 0) {
+                    // 1D transport test
+                    p.rdata(RealData::phatx) = 1.0;
+                    p.rdata(RealData::phaty) = 0.0;
+                    p.rdata(RealData::phatz) = 0.0;
+                }
+                else{
+                    // Random momentum emission
+                    symmetric_uniform(&rand, engine);
+                    amrex::Real phi = ((rand+1.0)*0.5)*2.0*MathConst::pi;
+                    symmetric_uniform(&rand, engine);
+                    amrex::Real cos_theta = rand;
+                    amrex::Real sin_theta = sqrt(1 - cos_theta*cos_theta);
+                    p.rdata(RealData::phatx) = sin_theta * cos(phi);
+                    p.rdata(RealData::phaty) = sin_theta * sin(phi);
+                    p.rdata(RealData::phatz) = cos_theta;
+                }
 
                 // Set particle energy
                 p.rdata(RealData::E_MeV) = nu_Energy_MeV;

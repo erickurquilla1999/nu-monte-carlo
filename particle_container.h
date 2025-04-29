@@ -42,12 +42,6 @@ public:
                         const amrex::DistributionMapping & a_dmap,
                         const amrex::BoxArray            & a_ba);
 
-    void InsertParticles(const int num_par_test_1, amrex::Real current_time_s);
-
-    void LoopParticlesPrint();
-
-    void MoveParticles(const amrex::Real dt);
-
     void UpdateCellIndex();
 
     void EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, const amrex::Real nu_Energy_MeV,  const amrex::Real dtdE3_3dOmegadx3, const amrex::Real curr_time_s);

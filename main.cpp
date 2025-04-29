@@ -84,7 +84,6 @@ void evolve()
     for (int i_step = 0; i_step < params.n_steps; ++i_step) {
         amrex::Print() << "Step: " << i_step << "\n";
         particles.Redistribute();
-        // particles.InsertParticles(params.test_1_n_particles, time_phys_s);
         particles.EmissionParticles(matter_mfab, n_nu_per_mc_particles, params.nu_Energy_center_MeV, dtdE3_3dOmegadx3, time_phys_s);
         compute_nu_n_and_f(particles, geom, nu_mfab);
 
@@ -96,7 +95,6 @@ void evolve()
             amrex::WriteSingleLevelPlotfile(plotfile_name, nu_mfab, {"n_invcm3", "fx_invcm3", "fy_invcm3", "fz_invcm3"}, geom, time_phys_s, i_step);
             if (i_step % params.write_particles == 0) {
                 // amrex::Print() << "Writing particles, step: " << i_step << "\n";
-                // particles.LoopParticlesPrint();
                 particles.WritePlotFile(plotfile_name, "particles");
             }
         }

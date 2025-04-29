@@ -59,7 +59,7 @@ void evolve()
     amrex::Real cellvolume = dx[0] * dx[1] * dx[2];
 
     // Initialize the bakground matter conditions
-    init_matter(matter_mfab);
+    init_matter(matter_mfab, geom, params.simulation_type);
 
     // Create the particle container
     MCParticleContainer particles(geom, distribution_mapping, domain_box_array);
@@ -85,6 +85,7 @@ void evolve()
         amrex::Print() << "Step: " << i_step << "\n";
         particles.Redistribute();
         particles.EmissionParticles(matter_mfab, n_nu_per_mc_particles, params.nu_Energy_center_MeV, dtdE3_3dOmegadx3, time_phys_s, params.simulation_type);
+        particles.UpdateCellIndex();
         compute_nu_n_and_f(particles, geom, nu_mfab);
 
 
@@ -99,7 +100,6 @@ void evolve()
             }
         }
 
-        particles.UpdateCellIndex();
         MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
 
         // Update the time

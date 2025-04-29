@@ -4,26 +4,30 @@
 #include "constant.h"
 
 void 
-init_matter(amrex::MultiFab& matter)
+init_matter(amrex::MultiFab& matter, const amrex::Geometry& geom, const int simtype)
 {
     for (amrex::MFIter mfi(matter); mfi.isValid(); ++mfi) {
         const amrex::Box& bx = mfi.validbox();
         const amrex::Array4<amrex::Real>& mf_array = matter.array(mfi);
         amrex::ParallelFor(bx, [=] AMREX_GPU_DEVICE (int i, int j, int k) {
 
-            if (i == 0 ) {
-                mf_array(i,j,k,MatterData::IMFP_cm) = 1.0/5.0; // 1/cm
-                mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
-                mf_array(i,j,k,MatterData::T_MeV) = 1.0; // MeV
-                mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
-                mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
-            } else {
-                mf_array(i,j,k,MatterData::IMFP_cm) = 1.0/5.0; // 1/cm
-                mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
-                mf_array(i,j,k,MatterData::T_MeV) = 1.0e-100; // MeV
-                mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
-                mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
+            if (simtype == 0) {
+                if (i == 0 ) {
+                    printf("i = %d, j = %d, k = %d\n", i, j, k);
+                    mf_array(i,j,k,MatterData::IMFP_cm) = 1.0/5.0; // 1/cm
+                    mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
+                    mf_array(i,j,k,MatterData::T_MeV) = 1.0; // MeV
+                    mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
+                    mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
+                } else {
+                    mf_array(i,j,k,MatterData::IMFP_cm) = 1.0/5.0; // 1/cm
+                    mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
+                    mf_array(i,j,k,MatterData::T_MeV) = 1.0e-100; // MeV
+                    mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
+                    mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
+                }
             }
+
             #ifdef DEBUG
                 printf("mf_array(%d,%d,%d,%d) = %f\n", i, j, k, MatterData::rho_g_ccm, mf_array(i,j,k,MatterData::rho_g_ccm)); // Print the value
             #endif

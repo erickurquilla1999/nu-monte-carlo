@@ -45,10 +45,6 @@ MCParticleContainer::UpdateCellIndex()
     }
 }
 
-
-
-
-
 namespace
 {
     AMREX_GPU_HOST_DEVICE void symmetric_uniform(Real* Usymmetric, amrex::RandomEngine const& engine)
@@ -56,10 +52,6 @@ namespace
         *Usymmetric = 2. * (amrex::Random(engine)-0.5);
     }
 }
-
-
-
-
 
 void
 MCParticleContainer::
@@ -225,9 +217,6 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
                 p.rdata(RealData::tau_limit) = -std::log(((rand+1.0)*0.5));
             }
 
-        }); // loop over grid cells
-
-
-    } // loop over multifabs
-
-} // InitParticles()
+        });
+    }
+}

@@ -91,7 +91,7 @@ ax.set_ylabel(r'$\left<n\right>$ (1/cm$^{{3}}$)')
 # ax.set_yscale('log')
 leg = ax.legend(framealpha=0.0, ncol=1, fontsize=20)
 apply_custom_settings(ax, leg, False)
-plt.savefig("shallowtest.pdf", bbox_inches='tight')
+plt.savefig("1dtransporttest.pdf", bbox_inches='tight')
 plt.show()
 plt.close(fig)
 

@@ -154,11 +154,11 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
             unsigned int uiz = amrex::min(nz-1,amrex::max(0,iz));
             unsigned int cellid = (uix * ny + uiy) * nz + uiz;
 
-            for (int newparthiscell=0; newparthiscell<pcount[cellid];newparthiscell++)
+            for (int i_newcell=0; i_newcell<pcount[cellid];i_newcell++)
             {
 
                 // Get the Particle data corresponding to our particle index in pidx
-                const int pidx = poffset[cellid] - poffset[0] + old_size + newparthiscell;
+                const int pidx = old_size + poffset[cellid] - pcount[cellid] + i_newcell;
 
                 ParticleType& p = pstruct[pidx];
 

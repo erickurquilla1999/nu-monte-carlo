@@ -38,6 +38,10 @@ void MoveParticlesMC(MCParticleContainer& particles, const amrex::MultiFab& stat
         p.rdata(RealData::tau) += PhysConst::c * dt * imfp_cm;
 
     });
+
+    // Remove particles that have left the domain
+    particles.Redistribute();
+
 }
 
 void compute_nu_n_and_f(MCParticleContainer& particles, const amrex::Geometry& geom, amrex::MultiFab& nu_n_and_f)

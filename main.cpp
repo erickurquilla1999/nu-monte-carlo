@@ -96,10 +96,9 @@ void evolve()
                 particles.WritePlotFile(plotfile_name, "particles");
             }
         }
-
+        
         MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
         particles.AbsorptionParticles();
-        particles.Redistribute();
 
         // Update the time
         time_phys_s += params.time_step_s;

@@ -222,4 +222,8 @@ AbsorptionParticles()
 
         });
     }
+
+    // Remove particles that have been absorbed
+    Redistribute();
+
 }

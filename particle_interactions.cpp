@@ -37,12 +37,6 @@ void MoveParticlesMC(MCParticleContainer& particles, const amrex::MultiFab& stat
 
         p.rdata(RealData::tau) += PhysConst::c * dt * imfp_cm;
 
-        if (p.rdata(RealData::tau) > p.rdata(RealData::tau_limit)) {
-            p.pos(0) = -1.0;
-            p.pos(1) = -1.0;
-            p.pos(2) = -1.0;
-        }
-        
     });
 }
 

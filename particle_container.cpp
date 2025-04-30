@@ -194,3 +194,32 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
         });
     }
 }
+
+void
+MCParticleContainer::
+AbsorptionParticles()
+{
+    const int lev = 0;
+
+    for (MyParIter pti(*this, lev); pti.isValid(); ++pti)
+    {
+        const int np  = pti.numParticles();
+        ParticleType* pstruct = &(pti.GetArrayOfStructs()[0]);
+
+        amrex::ParallelFor (np, [=] AMREX_GPU_DEVICE (int i) {
+
+            ParticleType& p = pstruct[i];
+
+            if (p.rdata(RealData::tau) > p.rdata(RealData::tau_limit)) {
+                p.pos(0) = -1.0;
+                p.pos(1) = -1.0;
+                p.pos(2) = -1.0;
+                p.rdata(RealData::x) = -1.0;
+                p.rdata(RealData::y) = -1.0;
+                p.rdata(RealData::z) = -1.0;
+                p.rdata(RealData::time_s) = -1.0;
+            }
+
+        });
+    }
+}

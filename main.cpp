@@ -98,6 +98,7 @@ void evolve()
         }
 
         MoveParticlesMC(particles, matter_mfab, geom, params.time_step_s);
+        particles.AbsorptionParticles();
         particles.Redistribute();
 
         // Update the time

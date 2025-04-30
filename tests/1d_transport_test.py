@@ -89,7 +89,7 @@ ax.plot(cell_positions_cm, n_xy_average_invcm3, marker='o', label='nu-monte-carl
 ax.set_xlabel(r'$x$ (cm)')
 ax.set_ylabel(r'$\left<n\right>/\left<n_{x_0}\right>$')
 # ax.set_yscale('log')
-leg = ax.legend(framealpha=0.0, ncol=1, fontsize=20)
+leg = ax.legend(framealpha=0.0, ncol=1, fontsize=25)
 apply_custom_settings(ax, leg, False)
 plt.savefig("1dtransporttest.pdf", bbox_inches='tight')
 plt.show()

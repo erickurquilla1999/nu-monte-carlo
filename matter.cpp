@@ -38,9 +38,9 @@ init_matter(amrex::MultiFab& matter, const amrex::Geometry& geom, const int simt
                 amrex::Real ycell = plo[1] + (j+0.5)*dx[1];
                 amrex::Real zcell = plo[2] + (k+0.5)*dx[2];
 
-                amrex::Real remitter[3] = {4.5, 5.5, 5.5}; // cm
+                amrex::Real remitter[3] = {1.5, 1.5, 1.5}; // cm
                 amrex::Real radius_emitter = 0.2; // cm
-                amrex::Real rabsorber[3] = {7.5, 5.5, 5.5}; // cm
+                amrex::Real rabsorber[3] = {3.0, 1.5, 1.5}; // cm
                 amrex::Real radius_absorber = 0.5; // cm
 
                 amrex::Real dist_emitter = sqrt( (xcell-remitter[0])*(xcell-remitter[0]) + (ycell-remitter[1])*(ycell-remitter[1]) + (zcell-remitter[2])*(zcell-remitter[2]) );

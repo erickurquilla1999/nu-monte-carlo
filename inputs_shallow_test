@@ -1,0 +1,25 @@
+simulation_type = 1 # Simulation type. 0 = 1D emmision test, 1 for random momentum emission
+
+input_n_cell_x = 40  # Number of cells in the x-direction
+input_n_cell_y = 30  # Number of cells in the y-direction
+input_n_cell_z = 30  # Number of cells in the z-direction
+
+input_max_grid_size_x = 40  # Maximum grid size subdivisions in x of the domain for parallelization
+input_max_grid_size_y = 30  # Maximum grid size subdivisions in y of the domain for parallelization
+input_max_grid_size_z = 30  # Maximum grid size subdivisions in z of the domain for parallelization
+
+input_physical_domain_size_x_cm = 4.0  # Physical domain size in the x-direction
+input_physical_domain_size_y_cm = 3.0  # Physical domain size in the y-direction
+input_physical_domain_size_z_cm = 3.0  # Physical domain size in the z-direction
+
+n_steps = 40 # Number of steps to run
+time_step_s = 3.33564095198152e-12  # Time step in seconds
+
+write_grid = 1 # Write grid every n steps
+write_particles = 1 # Write particles every n steps
+
+n_mc_particles = 1000 # Number of Monte Carlo particles
+
+nu_Energy_top_MeV    = 2.0  # Width of the neutrino energy distribution in MeV
+nu_Energy_center_MeV = 1.0  # Energy of the neutrino in MeV
+nu_Energy_bottom_MeV = 0.0  # Width of the neutrino energy distribution in MeV

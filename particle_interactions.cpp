@@ -20,11 +20,15 @@ void MoveParticlesMC(MCParticleContainer& particles, const amrex::MultiFab& stat
     [=] AMREX_GPU_DEVICE (MCParticleContainer::ParticleType& p,
                           amrex::Array4<const amrex::Real> const& sarr)
     {
-        amrex::Real imfp_cm = sarr(p.idata(IntData::i), p.idata(IntData::j), p.idata(IntData::k), MatterData::IMFP_cm);
+        int i_indx = amrex::Math::floor((p.pos(0) - plo_local[0]) / dx_local[0]);
+        int j_indx = amrex::Math::floor((p.pos(1) - plo_local[1]) / dx_local[1]);
+        int k_indx = amrex::Math::floor((p.pos(2) - plo_local[2]) / dx_local[2]);
+
+        amrex::Real imfp_cm = sarr(i_indx, j_indx, k_indx, MatterData::IMFP_cm);
 
         p.pos(0) += p.rdata(RealData::phatx) * dt * PhysConst::c;
-        p.pos(0) += p.rdata(RealData::phaty) * dt * PhysConst::c;
-        p.pos(0) += p.rdata(RealData::phatz) * dt * PhysConst::c;
+        p.pos(1) += p.rdata(RealData::phaty) * dt * PhysConst::c;
+        p.pos(2) += p.rdata(RealData::phatz) * dt * PhysConst::c;
 
         p.rdata(RealData::x) += p.rdata(RealData::phatx) * dt * PhysConst::c;
         p.rdata(RealData::y) += p.rdata(RealData::phaty) * dt * PhysConst::c;

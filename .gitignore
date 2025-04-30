@@ -36,3 +36,5 @@
 tmp_build_dir
 Backtrace*
 plt*
+*png
+*pdf

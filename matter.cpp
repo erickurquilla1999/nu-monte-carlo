@@ -18,7 +18,6 @@ init_matter(amrex::MultiFab& matter, const amrex::Geometry& geom, const int simt
 
             if (simtype == 0) {
                 if (i == 0 ) {
-                    printf("i = %d, j = %d, k = %d\n", i, j, k);
                     mf_array(i,j,k,MatterData::IMFP_cm) = 1.0/5.0; // 1/cm
                     mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
                     mf_array(i,j,k,MatterData::T_MeV) = 1.0; // MeV

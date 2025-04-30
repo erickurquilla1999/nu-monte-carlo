@@ -57,7 +57,7 @@ def apply_custom_settings(ax, leg, log_scale_y=False):
     leg.get_frame().set_linewidth(0.0)
 
 # Load AMReX plotfile
-ds = yt.load("plt299")
+ds = yt.load("plt300")
 
 # List available fields in the dataset
 print("Available fields:")
@@ -79,15 +79,15 @@ print("n_xy_average shape:", n_xy_average_invcm3.shape)
 
 n_xy_average_invcm3 = n_xy_average_invcm3 / n_xy_average_invcm3[0]
 
-cell_positions_cm = np.linspace(0.5, 10 - 0.5, 10)
+cell_positions_cm = np.linspace(0, 9, 10)
 k=1/5
-theoryvalues = np.exp(-k*(cell_positions_cm-0.5))
+theoryvalues = np.exp(-k*(cell_positions_cm))
 
 fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(cell_positions_cm, theoryvalues, color='red', label=r'$e^{-k(x-0.5)}$', linestyle='solid', linewidth=3)
+ax.plot(cell_positions_cm, theoryvalues, color='red', label=r'$e^{-\kappa x}$', linestyle='solid', linewidth=3)
 ax.plot(cell_positions_cm, n_xy_average_invcm3, marker='o', label='nu-monte-carlo', linestyle='dashed', linewidth=3)
 ax.set_xlabel(r'$x$ (cm)')
-ax.set_ylabel(r'$\left<n\right>$ (1/cm$^{{3}}$)')
+ax.set_ylabel(r'$\left<n\right>/\left<n_{x_0}\right>$')
 # ax.set_yscale('log')
 leg = ax.legend(framealpha=0.0, ncol=1, fontsize=20)
 apply_custom_settings(ax, leg, False)

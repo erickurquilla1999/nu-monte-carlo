@@ -6,6 +6,11 @@
 void 
 init_matter(amrex::MultiFab& matter, const amrex::Geometry& geom, const int simtype)
 {
+    const auto plo = geom.ProbLoArray();
+    const auto phi = geom.ProbHiArray();
+    const auto dx = geom.CellSizeArray();
+    const auto dxi = geom.InvCellSizeArray();
+
     for (amrex::MFIter mfi(matter); mfi.isValid(); ++mfi) {
         const amrex::Box& bx = mfi.validbox();
         const amrex::Array4<amrex::Real>& mf_array = matter.array(mfi);
@@ -26,6 +31,47 @@ init_matter(amrex::MultiFab& matter, const amrex::Geometry& geom, const int simt
                     mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
                     mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
                 }
+            }
+            else if (simtype == 1)
+            {
+                amrex::Real xcell = plo[0] + (i+0.5)*dx[0];
+                amrex::Real ycell = plo[1] + (j+0.5)*dx[1];
+                amrex::Real zcell = plo[2] + (k+0.5)*dx[2];
+
+                amrex::Real remitter[3] = {4.5, 5.5, 5.5}; // cm
+                amrex::Real radius_emitter = 0.2; // cm
+                amrex::Real rabsorber[3] = {7.5, 5.5, 5.5}; // cm
+                amrex::Real radius_absorber = 0.5; // cm
+
+                amrex::Real dist_emitter = sqrt( (xcell-remitter[0])*(xcell-remitter[0]) + (ycell-remitter[1])*(ycell-remitter[1]) + (zcell-remitter[2])*(zcell-remitter[2]) );
+                amrex::Real dist_absorber = sqrt( (xcell-rabsorber[0])*(xcell-rabsorber[0]) + (ycell-rabsorber[1])*(ycell-rabsorber[1]) + (zcell-rabsorber[2])*(zcell-rabsorber[2]) );
+
+                if (dist_emitter < radius_emitter) {
+                    mf_array(i,j,k,MatterData::IMFP_cm) = 1.0e-1; // 1/cm
+                    mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
+                    mf_array(i,j,k,MatterData::T_MeV) = 1.0; // MeV
+                    mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
+                    mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
+                } else if (dist_absorber < radius_absorber) {
+                    mf_array(i,j,k,MatterData::IMFP_cm) = 1.0e100; // 1/cm
+                    mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
+                    mf_array(i,j,k,MatterData::T_MeV) = 1.0e-100; // MeV
+                    mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
+                    mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
+                } else {
+                    mf_array(i,j,k,MatterData::IMFP_cm) = 0.0; // 1/cm
+                    mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
+                    mf_array(i,j,k,MatterData::T_MeV) = 1.0e-100; // MeV
+                    mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
+                    mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
+                }
+            } else if (simtype == 2)
+            {
+                mf_array(i,j,k,MatterData::IMFP_cm) = 1.0/5.0; // 1/cm
+                mf_array(i,j,k,MatterData::rho_g_ccm) = 1.0e15; // g/cm^3
+                mf_array(i,j,k,MatterData::T_MeV) = 1.0; // MeV
+                mf_array(i,j,k,MatterData::chemical_potential_MeV) = 0.0; // MeV
+                mf_array(i,j,k,MatterData::ye) = 0.3; // dimensionless
             }
 
             #ifdef DEBUG

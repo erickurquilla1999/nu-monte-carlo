@@ -77,7 +77,7 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
         Gpu::inclusive_scan(counts.begin(), counts.end(), offsets.begin());
 
         int num_to_add = offsets[tile_box.numPts()-1];
-        amrex::Print() << "Number of particles to add: " << num_to_add << "\n";
+        // amrex::Print() << "Number of particles to add: " << num_to_add << "\n";
         if (num_to_add == 0) continue;
 
         // this will be the particle ID for the first new particle in the tile
@@ -93,9 +93,9 @@ EmissionParticles(const amrex::MultiFab& matter, const amrex::Real n_nu_packet, 
 
             // Resize the particle container
             auto old_size = particle_tile.GetArrayOfStructs().size();
-            printf("old_size: %lu\n", old_size);
+            // printf("old_size: %lu\n", old_size);
             auto new_size = old_size + num_to_add;
-            printf("new_size: %lu\n", new_size);
+            // printf("new_size: %lu\n", new_size);
 
             particle_tile.resize(new_size);
 

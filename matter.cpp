@@ -74,7 +74,7 @@ init_matter(amrex::MultiFab& matter, const amrex::Geometry& geom, const int simt
             }
 
             #ifdef DEBUG
-                printf("mf_array(%d,%d,%d,%d) = %f\n", i, j, k, MatterData::rho_g_ccm, mf_array(i,j,k,MatterData::rho_g_ccm)); // Print the value
+                // printf("mf_array(%d,%d,%d,%d) = %f\n", i, j, k, MatterData::rho_g_ccm, mf_array(i,j,k,MatterData::rho_g_ccm)); // Print the value
             #endif
         });
     }
@@ -115,9 +115,9 @@ compute_nu_per_MC_particles(amrex::MultiFab& matter,const int n_mc_particles, am
     amrex::ParallelDescriptor::ReduceRealMin(maxIMFPcm);
 
     amrex::Real n_nu_emi = ( 1.0 / (PhysConst::c2 * PhysConst::hbar * PhysConst::hbar * PhysConst::hbar ) ) * dtdE3_3dOmegadx3 * sumkfeq;
-    printf("n_nu_emi: %e\n", n_nu_emi);
-    printf("sumkfeq: %e\n", sumkfeq);
-    printf("dtdE3_3dOmegadx3: %e\n", dtdE3_3dOmegadx3);
+    // printf("n_nu_emi: %e\n", n_nu_emi);
+    // printf("sumkfeq: %e\n", sumkfeq);
+    // printf("dtdE3_3dOmegadx3: %e\n", dtdE3_3dOmegadx3);
     n_nu_per_mc_particles = n_nu_emi / n_mc_particles;
-    printf("n_nu_per_mc_particles: %e\n", n_nu_per_mc_particles);
+    // printf("n_nu_per_mc_particles: %e\n", n_nu_per_mc_particles);
 }
